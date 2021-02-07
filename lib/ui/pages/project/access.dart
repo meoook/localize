@@ -4,7 +4,7 @@ import 'package:localize/model/project.dart';
 class UiProjectAccess extends StatelessWidget {
   final ModelProject project;
 
-  const UiProjectAccess({Key key, this.project}) : super(key: key);
+  const UiProjectAccess({Key key, @required this.project}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

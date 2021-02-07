@@ -1,5 +1,5 @@
 enum AccessLevel { TRANSLATE, INVITE, MANAGE, ADMIN, OWNER }
-enum AccessPage { FILES, ACCESS, CHANGE }
+enum AccessPage { FILES, MANAGE, ACCESS, CHANGE }
 // extension AccessExtension on AccessLevel {
 //   String get text => this.toString().split('.').last;
 // }
@@ -10,7 +10,8 @@ class ServicePermissions {
   List<AccessLevel> get list => _permissions;
 
   List<AccessPage> get access => [
-        if (isOwner || isManager || isTranslator) AccessPage.FILES,
+        if (translatorOnly) AccessPage.FILES,
+        if (canManage) AccessPage.MANAGE,
         if (isOwner || isAdmin || isInviter) AccessPage.ACCESS,
         if (isOwner) AccessPage.CHANGE,
       ];
@@ -20,6 +21,9 @@ class ServicePermissions {
   bool get isManager => _permissions.contains(AccessLevel.MANAGE);
   bool get isInviter => _permissions.contains(AccessLevel.INVITE);
   bool get isTranslator => _permissions.contains(AccessLevel.TRANSLATE);
+  bool get canTranslate => isOwner || isTranslator;
+  bool get canManage => isOwner || isManager;
+  bool get translatorOnly => isTranslator && _permissions.length == 1;
 
   ServicePermissions(List<dynamic> permissions) {
     if (permissions.isEmpty) _permissions.add(AccessLevel.OWNER);

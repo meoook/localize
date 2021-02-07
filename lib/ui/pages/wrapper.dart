@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:localize/notifier/folders.dart';
 import 'package:provider/provider.dart';
+import 'package:localize/notifier/folders.dart';
 import 'package:localize/notifier/projects.dart';
 import 'package:localize/notifier/navigation.dart';
 import 'package:localize/notifier/runner.dart';
@@ -39,29 +39,29 @@ class UiPageNavWrapper extends StatelessWidget {
   Widget build(BuildContext context) {
     final _root = context.watch<NotifierRunner>();
     final width = MediaQuery.of(context).size.width;
-    // final projects = context.watch<AbyStateManager>().projects;
-    // final languages = context.select<AbyStateManager, List>((value) => value.languages);
 
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<NotifierNavigator>(create: (_) => NotifierNavigator()),
         ChangeNotifierProvider<NotifierProjects>(create: (_) => NotifierProjects.init(_root.http)..start()),
         ChangeNotifierProxyProvider<NotifierNavigator, NotifierFolders>(
-            create: (_) => NotifierFolders(_root.http),
-            update: (_, _nav, _folders) => _folders..project(_nav?.params['id'])),
+          create: (_) => NotifierFolders(_root.http),
+          update: (_, _nav, _folders) => _folders..project(_nav?.params['id']),
+        ),
       ],
       child: Scaffold(
         backgroundColor: Theme.of(context).backgroundColor,
-        appBar: AppBar(title: Text('Abyss localize')),
         drawer: UiServiceSizing.scale(width) <= 1 ? UiMenuDrawer(user: _root.user) : null,
         body: Consumer<NotifierNavigator>(builder: (context, navigator, child) {
-          return Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-            if (UiServiceSizing.scale(width) > 1) UiNavBar(user: _root.user),
-            Expanded(child: this._getPage(context, navigator))
-          ]);
+          return Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              if (UiServiceSizing.scale(width) > 1) UiNavBar(user: _root.user),
+              Expanded(child: this._getPage(context, navigator))
+            ],
+          );
         }),
       ),
     );
-    // });
   }
 }

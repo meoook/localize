@@ -10,7 +10,7 @@ class UiProjectTabBar extends StatelessWidget {
   const UiProjectTabBar({Key key, @required this.tabs, this.selected, this.callback}) : super(key: key);
 
   String _text(AccessPage page) {
-    if (page == AccessPage.FILES) return 'Manage files';
+    if (page == AccessPage.MANAGE) return 'Manage files';
     if (page == AccessPage.ACCESS) return 'Manage access';
     if (page == AccessPage.CHANGE) return 'Game options';
     return '';

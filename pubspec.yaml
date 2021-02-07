@@ -30,6 +30,10 @@ dependencies:
 
 #  country_icons: ^1.1.1
 #  flag: ^3.0.5
+  window_size:
+    git:
+      url: git://github.com/google/flutter-desktop-embedding.git
+      path: plugins/window_size
 
 
 dev_dependencies:

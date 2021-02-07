@@ -5,9 +5,7 @@ class UiPageLogin extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Abyss localize"),
-      ),
+      // appBar: AppBar(title: Text("Abyss localize")),
       body: Container(
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
