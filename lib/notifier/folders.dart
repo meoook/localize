@@ -11,26 +11,40 @@ class NotifierFolders with ChangeNotifier {
   ApiStatus _status = ApiStatus.LOADING;
   ApiStatus get status => _status;
 
-  List<ModelFolder> _folders;
-  List<ModelFolder> get list => _folders;
+  ModelFolder _selected;
+  ModelFolder get selected => _selected;
+  set selected(ModelFolder folder) {
+    if (_selected == folder) return;
+    logger.d('Changing selected folder to $folder');
+    _selected = folder;
+    notifyListeners();
+  }
 
+  List<ModelFolder> _folders = [];
+  List<ModelFolder> get list => _folders;
+  List<String> get names => _folders.map((e) => e.name).toList();
+
+  // FIXME: not used
   ModelFolder byID(int folderID) => _folders?.firstWhere((_e) => _e.id == folderID);
 
   NotifierFolders(this._http) {
-    logger.i('Init Folders');
+    logger.d('Initialize folders...');
   }
 
   void project(String projectID) async {
-    if (_projectID != projectID) {
+    if (projectID == null)
+      logger.e('Project changed to $projectID');
+    else if (_projectID != projectID) {
       _projectID = projectID;
-      if (projectID == null) {
-        logger.d('Project changed to $projectID - reset folders');
-        _folders = null;
-        _status = ApiStatus.LOADING;
-      } else {
-        await _get();
-      }
-      notifyListeners();
+      _selected = null;
+      await _get();
+      // if (projectID == null) {
+      //   logger.d('Project changed to $projectID - reset folders');
+      //   _folders = [];
+      //   _status = ApiStatus.LOADING;
+      // } else {
+      //   await _get();
+      // }
     } else {
       logger.w('Try to get folders for same project');
     }
@@ -41,40 +55,46 @@ class NotifierFolders with ChangeNotifier {
     ApiResponse _response = await _http.get('prj/folder', params: {'save_id': _projectID});
     _status = _response.status;
     if (_response.status == ApiStatus.OK) {
-      final _parsed = _response.json.cast<Map<String, dynamic>>();
-      _folders = _parsed.map<ModelFolder>((json) => ModelFolder.fromJson(json)).toList();
+      _folders = List.from(_response.json).map((e) => ModelFolder.fromJson(e)).toList();
+      _folders.sort((a, b) => a.position.compareTo(b.position));
+      _selected ??= _folders.isNotEmpty ? _folders.first : null;
       logger.i('Get ${_folders.length} folders');
     } else {
       logger.w('Get folders ${_response.message}');
     }
+    notifyListeners();
   }
 
-// Future<ModelProject> projectAdd(String name, String iChars, int langOrig, List translate) async {
-//   var _payload = {'name': name, 'icon_chars': iChars, 'lang_orig': langOrig, 'translate_to': translate};
-//   return await _httpClient.post('prj', data: _payload).then((value) => ModelProject.fromJson(value));
-// }
-//
-// Future<ModelProject> projectUpdate(ModelProject project) async {
-//   var _payload = project.apiMap;
-//   return await _httpClient.post('prj/${project.id}', data: _payload).then((value) => ModelProject.fromJson(value));
-// }
-//
-// Future<bool> projectDelete(String projectID) async {
-//   return await _httpClient.request(Method.DELETE, 'prj/$projectID');
-// }
+  void create(String name) async {
+    logger.d('Create folder $name for project $_projectID');
+    ApiResponse _response = await _http.post('prj/folder/', data: {'save_id': _projectID, 'name': name});
+    if (_response.status == ApiStatus.OK) {
+      ModelFolder _folder = ModelFolder.fromJson(_response.json);
+      _folders.add(_folder);
+      _folders.sort((a, b) => a.position.compareTo(b.position));
+      _selected = _folder;
+      logger.i('Created ${_folder.name} folder for project $_projectID');
+      notifyListeners();
+    } else {
+      logger.w('Create folder $name fail - ${_response.message}');
+    }
+  }
 
-// Future<List<ModelFolder>> foldersGet(String projectID) async {
-//   logger.i('Get folders for project $projectID');
-//   try {
-//     var _data = await _apiManager.folderList(projectID);
-//     logger.i('Get ${_data.length} folders');
-//     return _data.map((e) => ModelFolder.fromJson(e)).toList();
-//   } on NoConnectionException {
-//     logger.e('Connection error while getting folders');
-//   } catch (err) {
-//     logger.e('Getting folders ${err.toString()}');
-//   }
-//   return null;
-// }
-
+  void delete() async {
+    if (_selected == null) {
+      logger.w('No selected folder to delete');
+    } else {
+      logger.d('Delete $_selected in project $_projectID');
+      ApiResponse _response = await _http.delete('prj/folder/${_selected.id}/');
+      if (_response.status == ApiStatus.OK) {
+        logger.i('Folder ${_selected.name} deleted in project $_projectID');
+        _folders.remove(_selected);
+        // _folders.sort((a, b) => a.position.compareTo(b.position));
+        _selected = _folders.isNotEmpty ? _folders.first : null;
+        notifyListeners();
+      } else {
+        logger.w('Delete folder ${_selected.name} fail - ${_response.message}');
+      }
+    }
+  }
 }

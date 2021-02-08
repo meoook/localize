@@ -33,7 +33,8 @@ ThemeData applicationThemeDark = ThemeData(
   // colorScheme: ColorScheme(),
   primaryColor: Color(0xFFFFFFFF), // Background primary
   accentColor: Color(0xFF7545D2), // Active elements
-  backgroundColor: Color(0xFF2A2A32),
+  // backgroundColor: Color(0xFF2A2A32),
+  scaffoldBackgroundColor: Color(0xFF2A2A32),
   dialogBackgroundColor: Color(0xFF202029),
   secondaryHeaderColor: Color(0xFF23232B),
   // accentColor: MaterialColor(0xFF7545D2, _brandMap), // Active elements

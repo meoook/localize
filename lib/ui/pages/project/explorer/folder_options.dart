@@ -1,53 +1,49 @@
 import 'package:flutter/material.dart';
-import 'package:localize/model/folder.dart';
-import 'package:localize/ui/utils.dart';
+import 'package:provider/provider.dart';
+
+import 'package:localize/notifier/folders.dart';
+import 'dialogs.dart';
+import 'folder_option_item.dart';
+
+enum FolderOption { LIST, ADD, MODIFY }
 
 class UiFolderOptions extends StatelessWidget {
-  final ModelFolder folder;
+  final FolderOption active;
+  final Function change;
 
-  const UiFolderOptions({Key key, this.folder}) : super(key: key);
+  const UiFolderOptions({Key key, @required this.active, @required this.change}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
+    NotifierFolders _folders = context.read<NotifierFolders>();
+
     return Row(
-      mainAxisSize: MainAxisSize.max,
       children: [
-        UiFolderOptionItem(text: 'file list', icon: Icons.format_list_bulleted, onPressed: () {}),
-        UiFolderOptionItem(text: 'add files', icon: Icons.file_download, onPressed: () {}),
-        UiFolderOptionItem(text: 'modify', icon: Icons.create, onPressed: () {}),
-        Expanded(child: const SizedBox()),
-        Text('${folder.id} ${folder.files}'),
-        UiFolderOptionItem(text: 'delete', icon: Icons.delete, onPressed: () {}),
+        UiFolderOptionItem(
+          text: 'file list',
+          icon: Icons.format_list_bulleted,
+          onPressed: () => change(FolderOption.LIST),
+          active: this.active == FolderOption.LIST,
+        ),
+        UiFolderOptionItem(
+          text: 'add files',
+          icon: Icons.file_download,
+          onPressed: () => change(FolderOption.ADD),
+          active: this.active == FolderOption.ADD,
+        ),
+        UiFolderOptionItem(
+          text: 'modify',
+          icon: Icons.create,
+          onPressed: () => change(FolderOption.MODIFY),
+          active: this.active == FolderOption.MODIFY,
+        ),
+        Expanded(child: Text(' files ${_folders.selected.files}', style: Theme.of(context).textTheme.subtitle1)),
+        UiFolderOptionItem(
+          text: 'delete',
+          icon: Icons.delete,
+          onPressed: () => warningDeleteDialog(context, _folders.delete, 'folder', _folders.selected.name),
+        ),
       ],
-    );
-  }
-}
-
-class UiFolderOptionItem extends StatelessWidget {
-  final GestureTapCallback onPressed;
-  final String text;
-  final IconData icon;
-
-  const UiFolderOptionItem({Key key, @required this.icon, this.text, this.onPressed}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    const double _padding = UiServiceSizing.padding;
-    return RawMaterialButton(
-      fillColor: null,
-      hoverColor: Colors.white10,
-      splashColor: Theme.of(context).splashColor,
-      elevation: _padding / 2,
-      padding: const EdgeInsets.symmetric(vertical: _padding, horizontal: _padding * 2),
-      onPressed: onPressed,
-      shape: const StadiumBorder(),
-      textStyle: Theme.of(context).textTheme.subtitle1,
-      child: Row(
-        children: [
-          Icon(icon),
-          if (text != null) SizedBox(width: _padding),
-          if (text != null) Text(text.cutTo(12), maxLines: 1),
-        ],
-      ),
     );
   }
 }

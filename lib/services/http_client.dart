@@ -2,9 +2,9 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:http/http.dart' as http;
-import 'package:localize/services/logger.dart';
 
-import 'file:///C:/Projects/Flutter/localize/lib/services/constants.dart';
+import 'constants.dart';
+import 'logger.dart';
 
 enum ApiStatus { LOADING, OK, ERROR, NO }
 
@@ -63,13 +63,12 @@ class ServiceHttpClient {
       logger.i('Token set in HTTP Client $token');
       _token = token;
       _authHeader = {HttpHeaders.authorizationHeader: "Token $_token"};
-      _headers = {..._authHeader, ..._contentTypeHeader};
     } else {
       logger.w('Token reset in HTTP Client');
       _token = null;
       _authHeader = {};
-      _headers = {..._contentTypeHeader};
     }
+    _headers = {..._authHeader, ..._contentTypeHeader};
   }
 
   Future<ApiResponse> get(String url, {Map<String, String> params}) async {
@@ -84,7 +83,7 @@ class ServiceHttpClient {
   }
 
   Future<ApiResponse> post(String url, {dynamic data}) async {
-    final _uri = '$apiUrlAddress/$url';
+    final String _uri = '$apiUrlAddress/$url';
     logger.d('Api POST $_uri', data);
     try {
       // final _payload = data != null ? jsonEncode(data) : jsonEncode({'any': 'data'});
@@ -96,24 +95,16 @@ class ServiceHttpClient {
     }
   }
 
-  // enum Method { GET, POST, PUT, DELETE }
-// String _getMethod(Method method) => method.toString().split('.').last;
-
-  // Future<dynamic> request(Method method, String url, {Map data}) async {
-  //   final _uri = Uri.parse('$apiUrlAddress/$url');
-  //   final request = http.Request(_getMethod(method), _uri);
-  //   request.headers.addAll(_headers);
-  //   request.body = jsonEncode(data);
-  //   logger.d('Api request $method $_uri', data);
-  //   try {
-  //     final response = await request.send();
-  //     var _data = await response.stream.bytesToString();
-  //     if (response.statusCode < 300) return jsonDecode(_data);
-  //     this._checkResponse(response.statusCode, _data);
-  //   } on SocketException {
-  //     this._errConnect();
-  //   }
-  // }
+  Future<ApiResponse> delete(String url) async {
+    final String _uri = '$apiUrlAddress/$url';
+    logger.d('Api DELETE $_uri');
+    try {
+      final _response = await http.delete(_uri, headers: _headers);
+      return ApiResponse(_response);
+    } on SocketException {
+      return ApiResponse.noConnect();
+    }
+  }
 
   // Private methods
   String _queryParameters(Map<String, String> params) {

@@ -5,6 +5,7 @@ import 'package:localize/services/logger.dart';
 
 class NotifierProjects with ChangeNotifier {
   final ServiceHttpClient _http;
+
   ApiStatus _status = ApiStatus.LOADING;
   ApiStatus get status => _status;
   List<ModelProject> _projects;
@@ -23,8 +24,7 @@ class NotifierProjects with ChangeNotifier {
     ApiResponse _response = await _http.get('prj');
     _status = _response.status;
     if (_response.status == ApiStatus.OK) {
-      final _parsed = _response.json.cast<Map<String, dynamic>>();
-      _projects = _parsed.map<ModelProject>((json) => ModelProject.fromJson(json)).toList();
+      _projects = List.from(_response.json).map((e) => ModelProject.fromJson(e)).toList();
       logger.i('Get ${_projects.length} projects');
     } else {
       logger.w('Get projects ${_response.message}');

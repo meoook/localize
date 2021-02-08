@@ -37,20 +37,16 @@ class UiPageNavWrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _root = context.watch<NotifierRunner>();
+    final _root = context.read<NotifierRunner>();
     final width = MediaQuery.of(context).size.width;
 
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<NotifierNavigator>(create: (_) => NotifierNavigator()),
         ChangeNotifierProvider<NotifierProjects>(create: (_) => NotifierProjects.init(_root.http)..start()),
-        ChangeNotifierProxyProvider<NotifierNavigator, NotifierFolders>(
-          create: (_) => NotifierFolders(_root.http),
-          update: (_, _nav, _folders) => _folders..project(_nav?.params['id']),
-        ),
       ],
       child: Scaffold(
-        backgroundColor: Theme.of(context).backgroundColor,
+        // backgroundColor: Theme.of(context).backgroundColor,
         drawer: UiServiceSizing.scale(width) <= 1 ? UiMenuDrawer(user: _root.user) : null,
         body: Consumer<NotifierNavigator>(builder: (context, navigator, child) {
           return Row(

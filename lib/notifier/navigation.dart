@@ -75,12 +75,12 @@ class ModelNavChoice {
     }
   }
 
-  factory ModelNavChoice.projects() => ModelNavChoice(NavChoice.PROJECTS);
-  factory ModelNavChoice.add() => ModelNavChoice(NavChoice.ADD);
-  factory ModelNavChoice.file() => ModelNavChoice(NavChoice.FILE);
-  factory ModelNavChoice.options() => ModelNavChoice(NavChoice.OPTIONS);
-  factory ModelNavChoice.logoff() => ModelNavChoice(NavChoice.LOGOUT);
+  // factory ModelNavChoice.projects() => ModelNavChoice(NavChoice.PROJECTS);
+  // factory ModelNavChoice.add() => ModelNavChoice(NavChoice.ADD);
+  // factory ModelNavChoice.file() => ModelNavChoice(NavChoice.FILE);
+  // factory ModelNavChoice.options() => ModelNavChoice(NavChoice.OPTIONS);
+  // factory ModelNavChoice.logoff() => ModelNavChoice(NavChoice.LOGOUT);
 
-  @override
-  String toString() => "Page $_name";
+  // @override
+  // String toString() => "Page $_name";
 }
