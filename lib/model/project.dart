@@ -11,24 +11,24 @@ class ModelProject {
   ServicePermissions permissions;
 
   @override
-  String toString() => 'project ${this.name} author ${this.author} id ${this.id}';
+  String toString() => 'project $name id $id';
 
   ModelProject.fromJson(Map<String, dynamic> json)
-      : this.id = json['save_id'],
-        this.name = json['name'],
-        this.iChars = json['icon_chars'],
-        this.author = json['author'],
-        this.created = DateTime.parse(json['created']),
-        this.langOriginal = json['lang_orig'],
-        this.translateTo = List<int>.from(json['translate_to']),
-        this.permissions = ServicePermissions(json['permissions_set']);
+      : id = json['save_id'],
+        name = json['name'],
+        iChars = json['icon_chars'],
+        author = json['author'],
+        created = DateTime.parse(json['created']),
+        langOriginal = json['lang_orig'],
+        translateTo = List<int>.from(json['translate_to']),
+        permissions = ServicePermissions(json['permissions_set']);
 
   Map<String, dynamic> get apiMap {
     return {
-      'name': this.name,
-      'icon_chars': this.iChars,
-      'lang_orig': this.langOriginal,
-      'translate_to': this.translateTo,
+      'name': name,
+      'icon_chars': iChars,
+      'lang_orig': langOriginal,
+      'translate_to': translateTo,
     };
   }
 }

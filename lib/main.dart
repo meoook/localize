@@ -35,11 +35,11 @@ class AppRunner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<NotifierRunner>(builder: (context, state, child) {
+    return Consumer<NotifierRunner>(builder: (context, runner, _) {
       return MaterialApp(
-        theme: state.options.theme ? applicationThemeLight : applicationThemeDark,
+        theme: runner.options.theme ? applicationThemeLight : applicationThemeDark,
         home: SafeArea(
-          child: _displayWidget(context, state.status),
+          child: _displayWidget(context, runner.status),
         ),
       );
     });

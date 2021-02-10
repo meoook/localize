@@ -4,10 +4,10 @@ class ModelLanguage {
   final String shortName;
 
   @override
-  String toString() => 'language ${this.id} ${this.shortName} ${this.name}';
+  String toString() => 'language $shortName $name id $id';
 
   ModelLanguage.fromJson(Map<String, dynamic> json)
-      : this.id = json['id'],
-        this.name = json['name'],
-        this.shortName = json['short_name'];
+      : id = json['id'],
+        name = json['name'],
+        shortName = json['short_name'];
 }

@@ -4,7 +4,7 @@ import 'package:localize/services/http_client.dart';
 import 'package:localize/services/logger.dart';
 
 class NotifierProjects with ChangeNotifier {
-  final ServiceHttpClient _http;
+  final ServiceHttpClient http;
 
   ApiStatus _status = ApiStatus.LOADING;
   ApiStatus get status => _status;
@@ -13,15 +13,15 @@ class NotifierProjects with ChangeNotifier {
 
   ModelProject byID(String projectID) => _projects?.firstWhere((_e) => _e.id == projectID);
 
-  NotifierProjects.init(ServiceHttpClient http) : this._http = http;
+  NotifierProjects(this.http);
 
-  void start() async {
+  void init() async {
     logger.d('Initialize projects...');
     await _get();
   }
 
   Future<void> _get() async {
-    ApiResponse _response = await _http.get('prj');
+    ApiResponse _response = await http.get('prj');
     _status = _response.status;
     if (_response.status == ApiStatus.OK) {
       _projects = List.from(_response.json).map((e) => ModelProject.fromJson(e)).toList();

@@ -43,7 +43,7 @@ class UiPageNavWrapper extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<NotifierNavigator>(create: (_) => NotifierNavigator()),
-        ChangeNotifierProvider<NotifierProjects>(create: (_) => NotifierProjects.init(_root.http)..start()),
+        ChangeNotifierProvider<NotifierProjects>(create: (_) => NotifierProjects(_root.http)..init()),
       ],
       child: Scaffold(
         // backgroundColor: Theme.of(context).backgroundColor,

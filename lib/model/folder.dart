@@ -7,13 +7,13 @@ class ModelFolder {
   String repoUrl;
 
   @override
-  String toString() => 'folder ${this.id} ${this.name} files amount ${this.files}';
+  String toString() => 'folder $name id $id';
 
   ModelFolder.fromJson(Map<String, dynamic> json)
-      : this.id = json['id'],
-        this.name = json['name'],
-        this.position = json['position'],
-        this.files = json['files_amount'],
-        this.repoStatus = json['repo_status'],
-        this.repoUrl = json['repo_url'];
+      : id = json['id'],
+        name = json['name'],
+        position = json['position'],
+        files = json['files_amount'],
+        repoStatus = json['repo_status'],
+        repoUrl = json['repo_url'];
 }

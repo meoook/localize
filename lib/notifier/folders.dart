@@ -73,7 +73,7 @@ class NotifierFolders with ChangeNotifier {
       _folders.add(_folder);
       _folders.sort((a, b) => a.position.compareTo(b.position));
       _selected = _folder;
-      logger.i('Created ${_folder.name} folder for project $_projectID');
+      logger.i('Created $_folder for project $_projectID');
       notifyListeners();
     } else {
       logger.w('Create folder $name fail - ${_response.message}');
@@ -93,7 +93,7 @@ class NotifierFolders with ChangeNotifier {
         _selected = _folders.isNotEmpty ? _folders.first : null;
         notifyListeners();
       } else {
-        logger.w('Delete folder ${_selected.name} fail - ${_response.message}');
+        logger.w('Delete $_selected fail - ${_response.message}');
       }
     }
   }

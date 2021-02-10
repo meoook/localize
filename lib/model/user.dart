@@ -5,11 +5,11 @@ class ModelUser {
   final bool isCreator;
 
   @override
-  String toString() => '${this.isCreator ? 'creator' : 'user'} ${this.name} id: ${this.id}';
+  String toString() => '${isCreator ? 'creator' : 'user'} $name id $id';
 
   ModelUser.fromJson(Map<String, dynamic> json)
-      : this.id = json['id'],
-        this.name = json['first_name'],
-        this.token = json['token'],
-        this.isCreator = json['role'] == 'creator';
+      : id = json['id'],
+        name = json['first_name'],
+        token = json['token'],
+        isCreator = json['role'] == 'creator';
 }

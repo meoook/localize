@@ -20,22 +20,22 @@ class ModelFile {
   final DateTime updated;
 
   @override
-  String toString() => 'file $id $name';
+  String toString() => 'file $name id $id';
 
   ModelFile.fromJson(json)
-      : this.id = json['id'],
-        this.name = json['name'],
-        this.method = json['method'],
-        this.items = json['items'],
-        this.words = json['words'],
-        this.langOriginal = json['lang_orig'],
-        // this.progress = json['translated_set'].map((_json) => ModelProgress.fromJson(_json, json['items'])).toList(),
-        this.progress = List.from(json['translated_set']).map((e) => ModelProgress.fromJson(e, json['items'])).toList(),
-        this.repoStatus = json['repo_status'],
-        this.warning = json['warning'],
-        this.error = json['error'],
-        this.created = DateTime.parse(json['created']),
-        this.updated = DateTime.parse(json['updated']);
+      : id = json['id'],
+        name = json['name'],
+        method = json['method'],
+        items = json['items'],
+        words = json['words'],
+        langOriginal = json['lang_orig'],
+        // progress = json['translated_set'].map((_json) => ModelProgress.fromJson(_json, json['items'])).toList(),
+        progress = List.from(json['translated_set']).map((e) => ModelProgress.fromJson(e, json['items'])).toList(),
+        repoStatus = json['repo_status'],
+        warning = json['warning'],
+        error = json['error'],
+        created = DateTime.parse(json['created']),
+        updated = DateTime.parse(json['updated']);
 
   // Map<String, dynamic> get apiMap {
   //   return {

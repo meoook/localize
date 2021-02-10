@@ -7,9 +7,12 @@ import 'package:localize/services/logger.dart';
 
 class NotifierFiles with ChangeNotifier {
   final ServiceHttpClient _http;
-
   String _projectID;
   int _folderID;
+  // pagination
+  int _size = 25;
+  int _page = 1;
+  int _total = 0;
 
   ApiStatus _status = ApiStatus.LOADING;
   ApiStatus get status => _status;
@@ -26,22 +29,37 @@ class NotifierFiles with ChangeNotifier {
   List<ModelFile> _files = [];
   List<ModelFile> get list => _files;
 
-  NotifierFiles(this._projectID, this._http) {
+  NotifierFiles(this._http) {
     logger.d('Initialize files...');
   }
 
-  Map<String, dynamic> get _params => {'save_id': _projectID, 'folder_id': _folderID};
+  Map<String, String> get _params => {
+        'save_id': _projectID,
+        'folder_id': '$_folderID',
+        'page': '$_page',
+        'size': '$_size',
+      };
 
-  void project() async => await _get();
+  // project files - for translator only
+  void project(String projectID) async {
+    _projectID = projectID;
+    if (_projectID == null)
+      logger.e('Can\'t get files if project is null');
+    else
+      await _get();
+  }
 
-  void folder(int folderID) async {
-    if (_folderID == null)
-      logger.e('Folder id set to $_folderID');
-    else if (_folderID != folderID) {
+  // files in folder - for manager
+  void folder(String projectID, int folderID) async {
+    if (projectID == null) logger.e('Can\'t get files if project is null');
+    if (folderID == null) logger.e('Can\'t get files if folder is null');
+    if (projectID == null || folderID == null) return;
+    if (_folderID != folderID) {
+      _projectID = projectID;
       _folderID = folderID;
       await _get();
     } else {
-      logger.w('Try to get folders for same project');
+      logger.w('Try to get files for same folder');
     }
   }
 
@@ -50,9 +68,10 @@ class NotifierFiles with ChangeNotifier {
     ApiResponse _response = await _http.get('file', params: _params);
     _status = _response.status;
     if (_response.status == ApiStatus.OK) {
-      _files = List.from(_response.json).map((e) => ModelFile.fromJson(e)).toList();
+      _total = _response.json['count'];
+      _files = List.from(_response.json['results']).map((e) => ModelFile.fromJson(e)).toList();
       _files.sort((a, b) => a.warning.compareTo(b.warning));
-      logger.i('Get ${_files.length} files');
+      logger.i('Get ${_files.length} files from $_total');
     } else {
       logger.w('Get files ${_response.message}');
     }
@@ -60,24 +79,24 @@ class NotifierFiles with ChangeNotifier {
   }
 
   void change(ModelFile file) async {
-    ModelFile _before = _files.firstWhere((element) => element.id == file.id);
+    // TODO - finish
+    final ModelFile _before = _files.firstWhere((element) => element.id == file.id);
     if (_before == null) return;
-    logger.i('Changing file name from ${_before.name} to ${file.name}');
+    logger.i('Changing $_before name to ${file.name}');
     ApiResponse _response = await _http.put('prj/file/${file.id}/', data: {'name': file.name});
   }
 
   void delete(ModelFile file) async {
-      logger.d('Delete file ${file.name} in project $_projectID');
-      ApiResponse _response = await _http.delete('prj/folder/${_selected.id}/');
-      if (_response.status == ApiStatus.OK) {
-        logger.i('Folder ${_selected.name} deleted in project $_projectID');
-        _folders.remove(_selected);
-        // _folders.sort((a, b) => a.position.compareTo(b.position));
-        _selected = _folders.isNotEmpty ? _folders.first : null;
-        notifyListeners();
-      } else {
-        logger.w('Delete folder ${_selected.name} fail - ${_response.message}');
-      }
+    logger.d('Delete $file');
+    ApiResponse _response = await _http.delete('prj/folder/${file.id}/');
+    if (_response.status == ApiStatus.OK) {
+      logger.i('File ${file.name} deleted');
+      _files.remove(file);
+      // _folders.sort((a, b) => a.position.compareTo(b.position));
+      // _selected = _folders.isNotEmpty ? _folders.first : null;
+      notifyListeners();
+    } else {
+      logger.w('Delete $file fail - ${_response.message}');
     }
   }
 }
