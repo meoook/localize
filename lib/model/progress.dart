@@ -1,13 +1,13 @@
 class ModelProgress {
   final int items;
   final int language;
-  final int progress;
+  final int value;
 
   @override
-  String toString() => 'language id $language $progress%';
+  String toString() => 'language id $language $value%';
 
   ModelProgress.fromJson(Map<String, dynamic> json, int total)
       : language = json['language'],
         items = json['items'],
-        progress = (100.0 * json['items'] / total).round();
+        value = (100.0 * json['items'] / total).round();
 }

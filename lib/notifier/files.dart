@@ -71,7 +71,7 @@ class NotifierFiles with ChangeNotifier {
       _total = _response.json['count'];
       _files = List.from(_response.json['results']).map((e) => ModelFile.fromJson(e)).toList();
       _files.sort((a, b) => a.warning.compareTo(b.warning));
-      logger.i('Get ${_files.length} files from $_total');
+      logger.i('Get ${_files.length} of $_total files');
     } else {
       logger.w('Get files ${_response.message}');
     }

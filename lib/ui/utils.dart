@@ -3,13 +3,16 @@ extension StringExtension on String {
   String cutTo(int length) => (this.length > length) ? this.substring(0, length - 2) + '...' : this;
 }
 
-String getStringDate(DateTime date) => '${date.day}.${date.month}.${date.year}';
+extension DateTimeExtension on DateTime {
+  String get getDate => '$day.$month.$year';
+}
 
 class UiServiceSizing {
   // App constants
   static const double padding = 8.0;
   static const double navbar = 80.0;
   static const double drawer = 200.0;
+  static const double file = 140.0; // File card height
   // Size to change scale
   static const double size_xl = 1200.0;
   static const double size_l = 1000.0;

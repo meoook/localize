@@ -33,8 +33,7 @@ class UiProjectCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text('created', style: Theme.of(context).textTheme.subtitle1, textScaleFactor: _scale),
-              Text(getStringDate(project.created),
-                  style: Theme.of(context).textTheme.subtitle2, textScaleFactor: _scale),
+              Text(project.created.getDate, style: Theme.of(context).textTheme.subtitle2, textScaleFactor: _scale),
             ],
           ),
         ],
