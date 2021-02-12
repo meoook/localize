@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:localize/notifier/navigator.dart';
 import 'package:provider/provider.dart';
 import 'package:localize/notifier/files.dart';
 import 'package:localize/notifier/navigation.dart';
@@ -61,13 +62,13 @@ class UiFileList extends StatelessWidget {
   Widget build(BuildContext context) {
     ServiceHttpClient _http = context.read<NotifierProjects>().http;
     return Expanded(
-      child: ChangeNotifierProxyProvider<NotifierNavigator, NotifierFiles>(
+      child: ChangeNotifierProxyProvider<ProviderNavigator, NotifierFiles>(
         create: (_) => NotifierFiles(_http),
         update: (_, _nav, _files) {
           if (folderID != null)
-            return _files..folder(_nav?.params['id'], folderID);
+            return _files..folder(_nav?.project, folderID);
           else
-            return _files..project(_nav?.params['id']);
+            return _files..project(_nav?.project);
         },
         child: Consumer<NotifierFiles>(
           builder: (context, files, child) {

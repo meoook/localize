@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:localize/notifier/runner.dart';
 import 'package:localize/ui/image/person.dart';
 
 class UiNavHeader extends StatelessWidget {
@@ -8,6 +10,8 @@ class UiNavHeader extends StatelessWidget {
   const UiNavHeader({Key key, this.user, this.wide = false}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    final String _name = context.read<NotifierRunner>().user.name;
+
     final _width = wide ? 100.0 : 50.0;
     final _tStyle = wide ? Theme.of(context).textTheme.headline5 : Theme.of(context).textTheme.subtitle2;
     return Container(
@@ -24,7 +28,7 @@ class UiNavHeader extends StatelessWidget {
             child: SizedBox(width: _width, height: _width, child: RivePerson()),
           ),
           const SizedBox(height: 4.0),
-          Text(user.name.split('#')[0], style: _tStyle),
+          Text(_name.split('#')[0], style: _tStyle),
         ],
       ),
     );

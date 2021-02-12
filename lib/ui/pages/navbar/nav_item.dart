@@ -1,25 +1,29 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:localize/notifier/navigation.dart';
+import 'package:localize/notifier/navigator.dart';
+import 'package:localize/ui/utils.dart';
+import 'package:provider/provider.dart';
 
 class UiNavBarItem extends StatelessWidget {
   final ModelNavChoice navigation;
-  final NotifierNavigator navigator;
 
-  const UiNavBarItem({Key key, this.navigation, this.navigator}) : super(key: key);
+  const UiNavBarItem({Key key, this.navigation}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final ProviderNavigator _navigator = context.watch<ProviderNavigator>();
+    const double _padding = UiServiceSizing.padding;
     return TextButton(
-      onPressed: () => navigator.navigate(navigation.nav),
-      // onPressed: () => navigator.navigate(navigation.nav),
-      style: navigation.nav == navigator.current ? TextButton.styleFrom(primary: Theme.of(context).accentColor) : null,
+      onPressed: () {
+        _navigator.project = null;
+        _navigator.navigate(navigation.nav);
+      },
+      style: navigation.nav == _navigator.nav ? TextButton.styleFrom(primary: Theme.of(context).accentColor) : null,
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 16.0),
+        padding: const EdgeInsets.symmetric(vertical: _padding * 2),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(navigation.icon, size: 32.0),
+            Icon(navigation.icon, size: _padding * 4),
             Text(navigation.name),
           ],
         ),

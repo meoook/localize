@@ -11,6 +11,9 @@ class NotifierProjects with ChangeNotifier {
   List<ModelProject> _projects;
   List<ModelProject> get list => _projects;
 
+  ModelProject selected;
+  set id(String projectID) => selected = _projects?.firstWhere((_e) => _e.id == projectID);
+
   ModelProject byID(String projectID) => _projects?.firstWhere((_e) => _e.id == projectID);
 
   NotifierProjects(this.http);

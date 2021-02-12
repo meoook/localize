@@ -9,42 +9,48 @@ import 'package:provider/provider.dart';
 class UiFileListItem extends StatelessWidget {
   final ModelFile file;
 
+  bool get isError => file.error.isNotEmpty;
+
   const UiFileListItem({Key key, this.file}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     const double _padding = UiServiceSizing.padding;
-    final _theme = Theme.of(context);
+    final _tTheme = Theme.of(context).textTheme;
     return IntrinsicHeight(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
             color: Colors.white10,
+            padding: const EdgeInsets.only(left: _padding),
             child: Row(
+              // crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(width: _padding),
-                Text(file.name, style: _theme.textTheme.headline5),
+                Text(file.name, style: _tTheme.headline5),
                 Spacer(),
                 IconButton(
                   icon: Icon(Icons.edit),
                   onPressed: () {},
                   iconSize: 14.0,
-                  splashRadius: 18.0,
+                  splashRadius: 16.0,
                   tooltip: 'Edit file',
+                  padding: const EdgeInsets.all(2),
                 ),
                 IconButton(
                   icon: Icon(Icons.copy),
                   onPressed: () {},
                   iconSize: 14.0,
-                  splashRadius: 18.0,
+                  splashRadius: 16.0,
                   tooltip: 'Load new or translated version',
+                  padding: const EdgeInsets.all(2),
                 ),
                 IconButton(
                   icon: Icon(Icons.delete_forever),
                   onPressed: () {},
                   iconSize: 14.0,
-                  splashRadius: 18.0,
+                  splashRadius: 16.0,
                   tooltip: 'Delete file',
+                  padding: const EdgeInsets.all(2),
                 ),
               ],
             ),
@@ -60,37 +66,72 @@ class UiFileListItem extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('Created ${file.created.getDate}', style: _theme.textTheme.caption),
-                        Text('Method ${file.method}', style: _theme.textTheme.overline),
-                        Text('Warning ${file.warning}',
-                            style: _theme.textTheme.bodyText1.copyWith(color: Colors.amber)),
+                        Text('Created ${file.created.getDate}', style: _tTheme.caption),
+                        Text('Method ${file.method}', style: _tTheme.overline),
+                        if (file.warning.isNotEmpty)
+                          Text('Warning ${file.warning}', style: _tTheme.bodyText1.copyWith(color: Colors.amber)),
                       ],
                     ),
                   ),
-                  Column(
-                    children: [
-                      Text('Total words', style: Theme.of(context).textTheme.caption),
-                      Expanded(
-                          child: Center(child: Text('${file.words}', style: Theme.of(context).textTheme.headline6))),
-                    ],
-                  ),
-                  Expanded(
-                    flex: 3,
-                    child: Column(
+                  if (!isError) ...[
+                    Column(
                       children: [
-                        Text('Progress', style: Theme.of(context).textTheme.caption),
-                        ...file.progress.map((e) => UiFileItemProgress(progress: e)).toList(),
+                        Text('Total words', style: _tTheme.caption),
+                        Expanded(child: Center(child: Text('${file.words}', style: _tTheme.headline6))),
                       ],
                     ),
-                  ),
-                  Column(
-                    children: [
-                      Text('Git status', style: Theme.of(context).textTheme.caption),
-                      Expanded(
-                        child: Center(child: Text('${file.repoStatus}', style: Theme.of(context).textTheme.bodyText1)),
+                    Expanded(
+                      flex: 1,
+                      child: Column(
+                        children: [
+                          Text('Original', style: _tTheme.caption),
+                          Expanded(child: Center(child: UiLanguageIcon(languageID: file.langOriginal))),
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                    Expanded(
+                      flex: 3,
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left: _padding * 5.7),
+                            child: Text('Progress', style: _tTheme.caption),
+                          ),
+                          Expanded(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [...file.progress.map((e) => UiFileItemProgress(progress: e)).toList()],
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: Column(
+                        children: [
+                          Text('Git status', style: _tTheme.caption),
+                          Expanded(
+                            child: Center(
+                              child: Icon(
+                                Icons.account_tree_rounded,
+                                color: (file.repoStatus == null)
+                                    ? Colors.white60
+                                    : file.repoStatus
+                                        ? Colors.green
+                                        : Colors.redAccent,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                  if (isError)
+                    Expanded(
+                      flex: 4,
+                      child: Text('Error ${file.error}', style: _tTheme.headline5.copyWith(color: Colors.redAccent)),
+                    ),
                 ],
                 // ),
               ),
@@ -118,24 +159,40 @@ class UiFileItemProgress extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<ModelLanguage> _languages = context.read<NotifierRunner>().languages;
-    final _language = _languages.firstWhere((lang) => lang.id == progress.language);
     return Row(
       children: [
-        Container(
-          margin: EdgeInsets.symmetric(horizontal: 8.0),
-          padding: EdgeInsets.symmetric(horizontal: 8.0),
-          decoration:
-              BoxDecoration(border: Border.all(color: Color(0xFFFFFFFF)), borderRadius: BorderRadius.circular(12.0)),
-          child: Text('${_language.shortName}'.capitalize()),
-        ),
+        UiLanguageIcon(languageID: progress.language),
         Expanded(
-          child: LinearProgressIndicator(
-            valueColor: AlwaysStoppedAnimation<Color>(_color),
-            value: progress.value / 100,
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              LinearProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(_color),
+                value: progress.value / 100,
+              ),
+              Text('${progress.value}%', style: Theme.of(context).textTheme.bodyText1),
+            ],
           ),
         ),
       ],
+    );
+  }
+}
+
+class UiLanguageIcon extends StatelessWidget {
+  final int languageID;
+
+  const UiLanguageIcon({Key key, this.languageID}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    final List<ModelLanguage> _languages = context.read<NotifierRunner>().languages;
+    final _language = _languages.firstWhere((lang) => lang.id == languageID);
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 8.0),
+      padding: EdgeInsets.symmetric(horizontal: 8.0),
+      decoration:
+          BoxDecoration(border: Border.all(color: Color(0xFFFFFFFF)), borderRadius: BorderRadius.circular(12.0)),
+      child: Text('${_language.shortName}'.capitalize()),
     );
   }
 }

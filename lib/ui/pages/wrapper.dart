@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:localize/notifier/navigator.dart';
 import 'package:provider/provider.dart';
-import 'package:localize/notifier/folders.dart';
 import 'package:localize/notifier/projects.dart';
-import 'package:localize/notifier/navigation.dart';
 import 'package:localize/notifier/runner.dart';
-import 'package:localize/ui/utils.dart';
-import 'package:localize/ui/pages/navbar/drawer.dart';
 import 'package:localize/ui/pages/navbar/navbar.dart';
 import 'package:localize/ui/pages/file/file.dart';
 import 'package:localize/ui/pages/loading.dart';
@@ -16,13 +13,56 @@ import 'package:localize/ui/pages/add/add.dart';
 import 'package:localize/ui/pages/projects/projects.dart';
 
 class UiPageNavWrapper extends StatelessWidget {
-  Widget _getPage(BuildContext context, NotifierNavigator navigator) {
-    switch (navigator.current) {
+  @override
+  Widget build(BuildContext context) {
+    final _root = context.read<NotifierRunner>();
+
+    return MultiProvider(
+      providers: [
+        Provider<ProviderNavigator>(create: (_) => ProviderNavigator()),
+        ChangeNotifierProvider<NotifierProjects>(create: (_) => NotifierProjects(_root.http)..init()),
+      ],
+      child: Scaffold(
+        // backgroundColor: Theme.of(context).backgroundColor,
+        body: Consumer<ProviderNavigator>(builder: (context, navigator, child) {
+          return UiPageNavigator(navigator: navigator);
+        }),
+      ),
+    );
+  }
+}
+
+class UiPageNavigator extends StatefulWidget {
+  final ProviderNavigator navigator;
+
+  const UiPageNavigator({Key key, @required this.navigator}) : super(key: key);
+  @override
+  _UiPageNavigatorState createState() => _UiPageNavigatorState();
+}
+
+class _UiPageNavigatorState extends State<UiPageNavigator> {
+  NavChoice _selected;
+
+  @override
+  initState() {
+    super.initState();
+    widget.navigator.navigation = navigate;
+    _selected = widget.navigator.nav;
+  }
+
+  void navigate(NavChoice choice) {
+    setState(() {
+      _selected = choice;
+    });
+  }
+
+  Widget _getPage() {
+    switch (_selected) {
       case NavChoice.PROJECTS:
-        if (navigator.params != null && navigator.params.containsKey('id')) return UiPageProject();
-        return UiPageProjectsList();
+        if (widget.navigator.project != null) return UiPageProject();
+        return UiPageProjectList();
       case NavChoice.ADD:
-        return UiPageAddProject();
+        return UiPageProjectAdd();
       case NavChoice.FILE:
         return UiPageFile();
       case NavChoice.OPTIONS:
@@ -37,27 +77,22 @@ class UiPageNavWrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _root = context.read<NotifierRunner>();
-    final width = MediaQuery.of(context).size.width;
-
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider<NotifierNavigator>(create: (_) => NotifierNavigator()),
-        ChangeNotifierProvider<NotifierProjects>(create: (_) => NotifierProjects(_root.http)..init()),
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        UiNavBar(),
+        Expanded(
+          child: AnimatedSwitcher(
+            duration: Duration(milliseconds: 500),
+            // transitionBuilder: (Widget child, Animation<double> animation) => ScaleTransition(scale: animation, child: child),
+            // transitionBuilder: (Widget child, Animation<double> animation) {
+            //   final offsetAnimation = Tween<Offset>(begin: Offset(0.0, -1.0), end: Offset(0.0, 0.0)).animate(animation);
+            //   return SlideTransition(position: offsetAnimation, child: child);
+            // },
+            child: this._getPage(),
+          ),
+        ),
       ],
-      child: Scaffold(
-        // backgroundColor: Theme.of(context).backgroundColor,
-        drawer: UiServiceSizing.scale(width) <= 1 ? UiMenuDrawer(user: _root.user) : null,
-        body: Consumer<NotifierNavigator>(builder: (context, navigator, child) {
-          return Row(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              if (UiServiceSizing.scale(width) > 1) UiNavBar(user: _root.user),
-              Expanded(child: this._getPage(context, navigator))
-            ],
-          );
-        }),
-      ),
     );
   }
 }

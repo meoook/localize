@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:localize/notifier/navigator.dart';
 import 'package:provider/provider.dart';
 
 import 'package:localize/model/project.dart';
 import 'package:localize/notifier/folders.dart';
-import 'package:localize/notifier/navigation.dart';
 import 'package:localize/notifier/projects.dart';
 import 'package:localize/notifier/runner.dart';
 import 'package:localize/services/permissions.dart';
@@ -28,9 +28,9 @@ class _UiPageProjectState extends State<UiPageProject> {
     // if (_selected == AccessPage.FILES) UiProjectFileList(project: project),
     if (_selected == AccessPage.MANAGE) {
       final _http = context.read<NotifierRunner>().http;
-      return ChangeNotifierProxyProvider<NotifierNavigator, NotifierFolders>(
+      return ChangeNotifierProxyProvider<ProviderNavigator, NotifierFolders>(
           create: (_) => NotifierFolders(_http),
-          update: (_, _nav, _folders) => _folders..project(_nav?.params['id']),
+          update: (_, _nav, _folders) => _folders..project(_nav?.project),
           child: UiProjectExplorer(project: project));
     }
     if (_selected == AccessPage.ACCESS) return UiProjectAccess(project: project);
@@ -40,8 +40,8 @@ class _UiPageProjectState extends State<UiPageProject> {
 
   @override
   Widget build(BuildContext context) {
-    var _nav = context.read<NotifierNavigator>();
-    ModelProject _project = context.read<NotifierProjects>().byID(_nav.params['id']);
+    var _nav = context.read<ProviderNavigator>();
+    ModelProject _project = context.read<NotifierProjects>().byID(_nav.project);
     List<AccessPage> _access = _project.permissions.access;
     this._selected ??= _access.first;
     return Container(

@@ -39,12 +39,12 @@ class NewProject {
   }
 }
 
-class UiPageAddProject extends StatefulWidget {
+class UiPageProjectAdd extends StatefulWidget {
   @override
-  _UiPageAddProjectState createState() => _UiPageAddProjectState();
+  _UiPageProjectAddState createState() => _UiPageProjectAddState();
 }
 
-class _UiPageAddProjectState extends State<UiPageAddProject> {
+class _UiPageProjectAddState extends State<UiPageProjectAdd> {
   NewProject _project = NewProject();
   int _step = 1;
 
