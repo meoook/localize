@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:localize/notifier/runner.dart';
+import 'package:localize/notifier/system.dart';
 import 'package:localize/services/http_client.dart';
 import 'package:localize/ui/image/rive_image.dart';
 import 'package:provider/provider.dart';
@@ -30,7 +30,7 @@ class _UiLoginFormState extends State<UiLoginForm> {
 
   void _onLogin() {
     if (_formKey.currentState.validate()) {
-      context.read<NotifierRunner>().login(username: _usernameController.text, password: _passwordController.text);
+      context.read<NotifierSystem>().login(username: _usernameController.text, password: _passwordController.text);
       displayError = true;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Try to login...')),
@@ -40,7 +40,7 @@ class _UiLoginFormState extends State<UiLoginForm> {
 
   @override
   Widget build(BuildContext context) {
-    final _status = context.watch<NotifierRunner>().status;
+    final _status = context.watch<NotifierSystem>().status;
     return Container(
       width: 350,
       child: Form(

@@ -8,10 +8,6 @@ import 'package:localize/services/logger.dart';
 
 // FIXME: this class not finished
 
-List<ModelFile> _mapFiles(data) {
-  return List.from(data).map((e) => ModelFile.fromJson(e)).toList();
-}
-
 class NotifierFiles with ChangeNotifier {
   final ServiceHttpClient _http;
   String _projectID;
@@ -78,14 +74,18 @@ class NotifierFiles with ChangeNotifier {
       _total = _response.json['count'];
       // _files = List.from(_response.json['results']).map((e) => ModelFile.fromJson(e)).toList();
       // String _data = jsonEncode(_response.json['results']);
-      // print('DATA IS $_data');
-      _files = await compute(_mapFiles, _response.json['results']);
+      _files = await compute(_isolate, _response.data);
       _files.sort((a, b) => a.warning.compareTo(b.warning));
       logger.i('Get ${_files.length} of $_total files');
     } else {
       logger.w('Get files ${_response.message}');
     }
     notifyListeners();
+  }
+
+  static List<ModelFile> _isolate(String data) {
+    var _json = jsonDecode(data);
+    return List.from(_json['results']).map((e) => ModelFile.fromJson(e)).toList();
   }
 
   void change(ModelFile file) async {

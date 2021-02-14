@@ -19,7 +19,7 @@ class UiPageProjectList extends StatelessWidget {
         // padding: const EdgeInsets.all(0.0),
         child: UiProjectCard(project: _projects[index]),
         onPressed: () {
-          _navigator.project = _projects[index].id;
+          _navigator.project = _projects[index];
           _navigator.navigate();
         },
       ),

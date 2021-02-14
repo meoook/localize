@@ -5,9 +5,9 @@ import 'package:localize/ui/utils.dart';
 class UiProjectTabBar extends StatelessWidget {
   final List<AccessPage> tabs;
   final AccessPage selected;
-  final Function callback;
+  final Function change;
 
-  const UiProjectTabBar({Key key, @required this.tabs, this.selected, this.callback}) : super(key: key);
+  const UiProjectTabBar({Key key, @required this.tabs, this.selected, this.change}) : super(key: key);
 
   String _text(AccessPage page) {
     if (page == AccessPage.MANAGE) return 'Manage files';
@@ -19,22 +19,22 @@ class UiProjectTabBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _scale = UiServiceSizing.scale(MediaQuery.of(context).size.width);
-    Color _getColor(bool selected) => selected ? Theme.of(context).primaryColor : Theme.of(context).buttonColor;
+    const double _padding = UiServiceSizing.padding;
+    var _theme = Theme.of(context);
+    Color _getColor(bool selected) => selected ? _theme.primaryColor : _theme.buttonColor;
     return Row(
-      mainAxisAlignment: _scale == 1 ? MainAxisAlignment.center : MainAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        if (_scale > 1) SizedBox(width: 8.0 * _scale),
-        ...tabs
-            .map((_e) => TextButton(
-                  onPressed: () => callback(_e),
-                  child: Container(
-                    padding: EdgeInsets.symmetric(vertical: 4.0 * _scale, horizontal: 8.0 * _scale),
-                    child: Text(_text(_e),
-                        style: Theme.of(context).textTheme.subtitle1.copyWith(color: _getColor(selected == _e)),
-                        textScaleFactor: _scale),
-                  ),
-                ))
-            .toList()
+        SizedBox(width: _padding * _scale * 0.5),
+        ...tabs.map(
+          (_e) => TextButton(
+            onPressed: () => change(_e),
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: _padding * _scale, vertical: _padding),
+              child: Text(_text(_e), style: _theme.textTheme.headline5.copyWith(color: _getColor(selected == _e))),
+            ),
+          ),
+        )
       ],
     );
   }

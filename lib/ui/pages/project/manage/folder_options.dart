@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:localize/notifier/folders.dart';
+
 import 'dialogs.dart';
 import 'folder_option_item.dart';
 

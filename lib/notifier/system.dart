@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:localize/model/language.dart';
 import 'package:localize/model/user.dart';
@@ -8,7 +10,7 @@ import 'package:localize/services/http_client.dart';
 import 'package:localize/services/logger.dart';
 import 'package:localize/services/options.dart';
 
-class NotifierRunner with ChangeNotifier {
+class NotifierSystem with ChangeNotifier {
   final ServiceHttpClient http = ServiceHttpClient();
   final ServiceOptions _options = ServiceOptions();
   ApiStatus _status = ApiStatus.ERROR; // Auth status
@@ -20,7 +22,7 @@ class NotifierRunner with ChangeNotifier {
   List<ModelLanguage> get languages => _languages;
   ModelOptions get options => _options.options;
 
-  NotifierRunner() {
+  NotifierSystem() {
     _startApp();
   }
 
@@ -42,11 +44,16 @@ class NotifierRunner with ChangeNotifier {
     logger.d('Initialize languages...');
     ApiResponse _response = await http.get('lang');
     if (_response.status == ApiStatus.OK) {
-      _languages = List.from(_response.json).map((e) => ModelLanguage.fromJson(e)).toList();
+      _languages = await compute(_isolate, _response.data);
       logger.i('Get ${_languages.length} languages');
     } else {
       logger.w('Get languages ${_response.message}');
     }
+  }
+
+  static List<ModelLanguage> _isolate(String data) {
+    var _json = jsonDecode(data);
+    return List.from(_json).map((e) => ModelLanguage.fromJson(e)).toList();
   }
 
   Future<void> _auth(String token) async {

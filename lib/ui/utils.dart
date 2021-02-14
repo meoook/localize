@@ -20,10 +20,10 @@ class UiServiceSizing {
   static const double size_s = 600.0;
 
   static double scale(double width) {
-    if (width > size_xl) return 2.6;
-    if (width > size_l) return 2.2;
-    if (width > size_m) return 1.8;
-    if (width > size_s) return 1.4;
+    if (width > size_xl) return 2.0;
+    if (width > size_l) return 1.6;
+    if (width > size_m) return 1.3;
+    if (width > size_s) return 1.1;
     return 1.0;
   }
 }

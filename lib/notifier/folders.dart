@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:localize/model/folder.dart';
 import 'package:localize/services/http_client.dart';
@@ -55,14 +58,22 @@ class NotifierFolders with ChangeNotifier {
     ApiResponse _response = await _http.get('prj/folder', params: {'save_id': _projectID});
     _status = _response.status;
     if (_response.status == ApiStatus.OK) {
-      _folders = List.from(_response.json).map((e) => ModelFolder.fromJson(e)).toList();
-      _folders.sort((a, b) => a.position.compareTo(b.position));
+      _folders = await compute(_isolate, _response.data);
+      // _folders = List.from(_response.json).map((e) => ModelFolder.fromJson(e)).toList();
+      // _folders.sort((a, b) => a.position.compareTo(b.position));
       _selected ??= _folders.isNotEmpty ? _folders.first : null;
       logger.i('Get ${_folders.length} folders');
     } else {
       logger.w('Get folders ${_response.message}');
     }
     notifyListeners();
+  }
+
+  static List<ModelFolder> _isolate(String data) {
+    var _json = jsonDecode(data);
+    var _list = List.from(_json).map((e) => ModelFolder.fromJson(e)).toList();
+    _list.sort((a, b) => a.position.compareTo(b.position));
+    return _list;
   }
 
   void create(String name) async {

@@ -14,7 +14,6 @@ class UiFolderOptionItem extends StatelessWidget {
   Widget build(BuildContext context) {
     const double _padding = UiServiceSizing.padding;
     return RawMaterialButton(
-      fillColor: null,
       hoverColor: Colors.white10,
       splashColor: Theme.of(context).splashColor,
       elevation: _padding / 2,

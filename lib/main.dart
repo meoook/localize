@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:localize/notifier/runner.dart';
+import 'package:localize/notifier/system.dart';
 import 'package:localize/services/http_client.dart';
 import 'package:localize/services/theme.dart';
 import 'package:localize/ui/pages/login/login.dart';
@@ -18,8 +18,8 @@ void main() {
     setWindowMaxSize(Size.infinite);
   }
   runApp(
-    ChangeNotifierProvider<NotifierRunner>(
-      create: (_) => NotifierRunner(),
+    ChangeNotifierProvider<NotifierSystem>(
+      create: (_) => NotifierSystem(),
       child: AppRunner(),
     ),
   );
@@ -35,7 +35,7 @@ class AppRunner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<NotifierRunner>(builder: (context, runner, _) {
+    return Consumer<NotifierSystem>(builder: (context, runner, _) {
       return MaterialApp(
         theme: runner.options.theme ? applicationThemeLight : applicationThemeDark,
         home: SafeArea(

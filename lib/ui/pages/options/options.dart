@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:localize/notifier/runner.dart';
+import 'package:localize/notifier/system.dart';
 import 'package:localize/services/options.dart';
 import 'package:localize/ui/utils.dart';
 
@@ -132,8 +132,8 @@ class UiPageOptions extends StatelessWidget {
 class UiThemeSwitch extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final bool _isLight = context.watch<NotifierRunner>().options.theme;
-    final NotifierRunner state = context.watch<NotifierRunner>();
+    final bool _isLight = context.watch<NotifierSystem>().options.theme;
+    final NotifierSystem state = context.watch<NotifierSystem>();
     // final ServiceStateManager state = context.select<ServiceStateManager>((value) => value);
 
     return GestureDetector(

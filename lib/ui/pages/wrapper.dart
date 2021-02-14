@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:localize/notifier/navigator.dart';
 import 'package:provider/provider.dart';
+import 'package:localize/notifier/navigator.dart';
 import 'package:localize/notifier/projects.dart';
-import 'package:localize/notifier/runner.dart';
+import 'package:localize/notifier/system.dart';
 import 'package:localize/ui/pages/navbar/navbar.dart';
 import 'package:localize/ui/pages/file/file.dart';
 import 'package:localize/ui/pages/loading.dart';
@@ -15,7 +15,7 @@ import 'package:localize/ui/pages/projects/projects.dart';
 class UiPageNavWrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final _root = context.read<NotifierRunner>();
+    final _root = context.read<NotifierSystem>();
 
     return MultiProvider(
       providers: [
@@ -68,7 +68,7 @@ class _UiPageNavigatorState extends State<UiPageNavigator> {
       case NavChoice.OPTIONS:
         return UiPageOptions();
       case NavChoice.LOGOUT:
-        context.select<NotifierRunner, Function>((value) => value.logout)();
+        context.select<NotifierSystem, Function>((value) => value.logout)();
         return UiPageLoading();
       default:
         return UiPageUnknown();

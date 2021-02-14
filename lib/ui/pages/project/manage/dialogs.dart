@@ -53,7 +53,7 @@ Future<void> warningDeleteDialog(BuildContext context, Function submit, String t
             text: 'Are you sure to delete',
             children: [
               TextSpan(text: ' $type', style: TextStyle(fontStyle: FontStyle.italic)),
-              TextSpan(text: ' $name', style: TextStyle(fontWeight: FontWeight.bold)),
+              TextSpan(text: '\n$name', style: TextStyle(fontWeight: FontWeight.bold)),
             ],
           ),
         ),

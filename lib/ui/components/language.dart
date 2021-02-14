@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:localize/notifier/runner.dart';
+import 'package:localize/notifier/system.dart';
 import 'package:provider/provider.dart';
 
 class _LanguageIcon extends StatelessWidget {
@@ -62,7 +62,7 @@ class _LanguagesDropDownState extends State<LanguagesDropDown> {
 
   @override
   Widget build(BuildContext context) {
-    final languages = context.watch<NotifierRunner>().languages;
+    final languages = context.watch<NotifierSystem>().languages;
     String idToString(int langID) => languages.firstWhere((element) => element.id == langID).name;
     return PopupMenuButton<int>(
       initialValue: languages != null ? int.tryParse(cellCurrentValue) : cellCurrentValue,

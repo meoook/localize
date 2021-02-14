@@ -1,10 +1,14 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:localize/model/file.dart';
 import 'package:localize/model/language.dart';
 import 'package:localize/model/progress.dart';
-import 'package:localize/notifier/runner.dart';
+import 'package:localize/notifier/navigator.dart';
+import 'package:localize/notifier/system.dart';
 import 'package:localize/ui/utils.dart';
 import 'package:provider/provider.dart';
+
+import 'dialogs.dart';
 
 class UiFileListItem extends StatelessWidget {
   final ModelFile file;
@@ -14,19 +18,32 @@ class UiFileListItem extends StatelessWidget {
   const UiFileListItem({Key key, this.file}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    ProviderNavigator _nav = context.watch<ProviderNavigator>();
+
     const double _padding = UiServiceSizing.padding;
     final _tTheme = Theme.of(context).textTheme;
+    Widget _name() => Container(
+          padding: const EdgeInsets.only(bottom: _padding / 2, left: _padding, right: _padding),
+          child: Text(file.name, style: _tTheme.headline6),
+        );
+
     return IntrinsicHeight(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
             color: Colors.white10,
-            padding: const EdgeInsets.only(left: _padding),
+            padding: const EdgeInsets.only(right: _padding),
             child: Row(
-              // crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(file.name, style: _tTheme.headline5),
+                if (!_nav.project.permissions.canTranslate) _name(),
+                if (_nav.project.permissions.canTranslate)
+                  TextButton(
+                      child: _name(),
+                      onPressed: () {
+                        _nav.file = file;
+                        _nav.navigate(NavChoice.FILE);
+                      }),
                 Spacer(),
                 IconButton(
                   icon: Icon(Icons.edit),
@@ -34,7 +51,7 @@ class UiFileListItem extends StatelessWidget {
                   iconSize: 14.0,
                   splashRadius: 16.0,
                   tooltip: 'Edit file',
-                  padding: const EdgeInsets.all(2),
+                  constraints: const BoxConstraints(minWidth: 36, minHeight: 36),
                 ),
                 IconButton(
                   icon: Icon(Icons.copy),
@@ -42,15 +59,15 @@ class UiFileListItem extends StatelessWidget {
                   iconSize: 14.0,
                   splashRadius: 16.0,
                   tooltip: 'Load new or translated version',
-                  padding: const EdgeInsets.all(2),
+                  constraints: const BoxConstraints(minWidth: 36, minHeight: 36),
                 ),
                 IconButton(
                   icon: Icon(Icons.delete_forever),
-                  onPressed: () {},
+                  onPressed: () => warningDeleteDialog(context, null, 'file', file.name),
                   iconSize: 14.0,
                   splashRadius: 16.0,
                   tooltip: 'Delete file',
-                  padding: const EdgeInsets.all(2),
+                  constraints: const BoxConstraints(minWidth: 36, minHeight: 36),
                 ),
               ],
             ),
@@ -185,7 +202,7 @@ class UiLanguageIcon extends StatelessWidget {
   const UiLanguageIcon({Key key, this.languageID}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    final List<ModelLanguage> _languages = context.read<NotifierRunner>().languages;
+    final List<ModelLanguage> _languages = context.read<NotifierSystem>().languages;
     final _language = _languages.firstWhere((lang) => lang.id == languageID);
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 8.0),

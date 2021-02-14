@@ -16,12 +16,13 @@ class ApiResponse {
   ApiStatus _status = ApiStatus.LOADING;
   int _code;
   String _message = 'loading...';
-  var _json;
+  String _data;
 
   ApiStatus get status => _status;
   int get code => _code;
   String get message => _message;
-  get json => _json;
+  String get data => _data;
+  dynamic get json => data != null ? jsonDecode(_data) : null;
 
   ApiResponse.noConnect() {
     logger.w('Request connection error');
@@ -30,17 +31,17 @@ class ApiResponse {
   }
   ApiResponse.exception(String error) {
     logger.wtf('Request unknown error', error);
-    _message = error.length > 250 ? error.substring(0, error.length - 3) + '...' : error;
+    _message = _cut(error);
     _status = ApiStatus.NO;
   }
 
   ApiResponse(http.Response response) {
     _code = response.statusCode;
+    _data = response.body.isNotEmpty ? response.body : '';
     if (_code < 300) {
       _status = ApiStatus.OK;
-      _json = response.body.isNotEmpty ? jsonDecode(response.body) : null;
     } else {
-      logger.w('Request error code $_code'); // TODO: No info about body
+      logger.w('Request error code $_code body ${_cut(_data)}');
       _status = ApiStatus.ERROR;
       if (code == 403)
         _message = 'auth error';
@@ -50,6 +51,8 @@ class ApiResponse {
         _message = 'request error code $_code';
     }
   }
+
+  String _cut(String message) => message.length > 50 ? message.substring(0, message.length - 3) + '...' : message;
 
   @override
   String toString() => "Status $status\nCode $_code\nMessage $message\n";

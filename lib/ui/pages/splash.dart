@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:localize/notifier/runner.dart';
+import 'package:localize/notifier/system.dart';
 import 'package:localize/ui/image/rive_image.dart';
 import 'package:provider/provider.dart';
 
@@ -15,7 +15,7 @@ class SplashScreen extends StatelessWidget {
         color: Color(0xFF313131),
         padding: const EdgeInsets.all(32.0),
         child: GestureDetector(
-          onTap: () => noConnection ? context.read<NotifierRunner>().reset() : null,
+          onTap: () => noConnection ? context.read<NotifierSystem>().reset() : null,
           child: Column(
             children: [
               Expanded(child: RiveImage(path: 'assets/rive/logo.riv', animation: 'aby')),

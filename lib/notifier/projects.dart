@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:localize/model/project.dart';
 import 'package:localize/services/http_client.dart';
@@ -11,11 +14,6 @@ class NotifierProjects with ChangeNotifier {
   List<ModelProject> _projects;
   List<ModelProject> get list => _projects;
 
-  ModelProject selected;
-  set id(String projectID) => selected = _projects?.firstWhere((_e) => _e.id == projectID);
-
-  ModelProject byID(String projectID) => _projects?.firstWhere((_e) => _e.id == projectID);
-
   NotifierProjects(this.http);
 
   void init() async {
@@ -27,12 +25,18 @@ class NotifierProjects with ChangeNotifier {
     ApiResponse _response = await http.get('prj');
     _status = _response.status;
     if (_response.status == ApiStatus.OK) {
-      _projects = List.from(_response.json).map((e) => ModelProject.fromJson(e)).toList();
+      // _projects = List.from(_response.json).map((e) => ModelProject.fromJson(e)).toList();
+      _projects = await compute(_isolate, _response.data);
       logger.i('Get ${_projects.length} projects');
     } else {
       logger.w('Get projects ${_response.message}');
     }
     notifyListeners();
+  }
+
+  static List<ModelProject> _isolate(String data) {
+    var _json = jsonDecode(data);
+    return List.from(_json).map((e) => ModelProject.fromJson(e)).toList();
   }
 
   // Future<ModelProject> projectAdd(String name, String iChars, int langOrig, List translate) async {
@@ -63,4 +67,8 @@ class NotifierProjects with ChangeNotifier {
 //   return null;
 // }
 
+}
+
+class AnyClass<T> {
+  T data;
 }
