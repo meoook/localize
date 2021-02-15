@@ -13,6 +13,7 @@ class NotifierProjects with ChangeNotifier {
   ApiStatus get status => _status;
   List<ModelProject> _projects;
   List<ModelProject> get list => _projects;
+  List<String> get names => _projects.map((e) => e.name).toList();
 
   NotifierProjects(this.http);
 

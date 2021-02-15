@@ -31,7 +31,7 @@ class UiProjectTabBar extends StatelessWidget {
             onPressed: () => change(_e),
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: _padding * _scale, vertical: _padding),
-              child: Text(_text(_e), style: _theme.textTheme.headline5.copyWith(color: _getColor(selected == _e))),
+              child: Text(_text(_e), style: _theme.textTheme.headline6.copyWith(color: _getColor(selected == _e))),
             ),
           ),
         )

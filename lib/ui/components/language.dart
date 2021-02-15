@@ -62,7 +62,7 @@ class _LanguagesDropDownState extends State<LanguagesDropDown> {
 
   @override
   Widget build(BuildContext context) {
-    final languages = context.watch<NotifierSystem>().languages;
+    final languages = context.read<NotifierSystem>().languages;
     String idToString(int langID) => languages.firstWhere((element) => element.id == langID).name;
     return PopupMenuButton<int>(
       initialValue: languages != null ? int.tryParse(cellCurrentValue) : cellCurrentValue,

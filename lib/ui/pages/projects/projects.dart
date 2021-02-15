@@ -11,10 +11,9 @@ class UiPageProjectList extends StatelessWidget {
     final _navigator = context.watch<ProviderNavigator>();
 
     if (_projects == null) return Container(child: Text('No games'));
-
     return ListView.separated(
       itemCount: _projects.length,
-      separatorBuilder: (_, __) => Divider(),
+      separatorBuilder: (_, __) => Divider(height: 1.0, thickness: 1.0),
       itemBuilder: (_, index) => TextButton(
         // padding: const EdgeInsets.all(0.0),
         child: UiProjectCard(project: _projects[index]),

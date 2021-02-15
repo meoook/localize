@@ -1,27 +1,35 @@
 import 'package:localize/services/permissions.dart';
 
-class ModelProject {
+class ModelProject extends ModelNewProject {
   final String id;
-  String name;
-  String iChars;
   final String author;
   final DateTime created;
-  int langOriginal;
-  List<int> translateTo;
-  ServicePermissions permissions;
+  final ServicePermissions permissions;
 
   @override
   String toString() => 'project $name id $id';
 
   ModelProject.fromJson(Map<String, dynamic> json)
       : id = json['save_id'],
-        name = json['name'],
-        iChars = json['icon_chars'],
         author = json['author'],
         created = DateTime.parse(json['created']),
+        permissions = ServicePermissions(json['permissions_set']),
+        super.fromJson(json);
+}
+
+class ModelNewProject {
+  String name;
+  String iChars;
+  int langOriginal;
+  List<int> translateTo = [];
+
+  ModelNewProject();
+
+  ModelNewProject.fromJson(Map<String, dynamic> json)
+      : name = json['name'],
+        iChars = json['icon_chars'],
         langOriginal = json['lang_orig'],
-        translateTo = List<int>.from(json['translate_to']),
-        permissions = ServicePermissions(json['permissions_set']);
+        translateTo = List<int>.from(json['translate_to']);
 
   Map<String, dynamic> get apiMap {
     return {

@@ -10,30 +10,27 @@ class UiProjectIconChars extends StatelessWidget {
   Widget build(BuildContext context) {
     final _chars = iChars.length >= 2 ? iChars.capitalize().substring(0, 2) : iChars.capitalize();
     return Container(
-      width: scale * 2.4 * 24,
+      width: scale * 2.2 * 24,
       height: scale * 2.2 * 24,
+      transformAlignment: Alignment.center,
       alignment: Alignment.center,
       child: Text(
         _chars,
         style: TextStyle(
           fontSize: scale * 24,
           letterSpacing: scale * 3,
-          foreground: Paint()
-            ..style = PaintingStyle.stroke
-            ..strokeWidth = scale * 1.5
-            ..color = Theme.of(context).accentColor,
+          color: Theme.of(context).primaryColor,
         ),
       ),
-      // padding: EdgeInsets.only(bottom: 2.0),
-      // margin: EdgeInsets.all(0.0),
+      padding: EdgeInsets.only(bottom: scale * 2),
       decoration: BoxDecoration(
-        // borderRadius: BorderRadius.circular(8.0),
-        border: Border.all(color: Theme.of(context).accentColor, width: scale),
-        color: Theme.of(context).primaryColor,
-        // boxShadow: [
-        //   BoxShadow(
-        //       offset: Offset(1.0, 0.0), blurRadius: 2.0, spreadRadius: 1.0)
-        // ],
+        border: Border.all(color: Theme.of(context).canvasColor, width: scale.round() * 2.0),
+        borderRadius: BorderRadius.circular(scale * 2.4 * 24),
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          colors: <Color>[Colors.deepPurple, Colors.black26],
+        ),
+        boxShadow: [BoxShadow(blurRadius: 4.0)],
       ),
     );
   }
