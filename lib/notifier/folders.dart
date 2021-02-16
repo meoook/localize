@@ -41,26 +41,17 @@ class NotifierFolders with ChangeNotifier {
       _projectID = projectID;
       _selected = null;
       await _get();
-      // if (projectID == null) {
-      //   logger.d('Project changed to $projectID - reset folders');
-      //   _folders = [];
-      //   _status = ApiStatus.LOADING;
-      // } else {
-      //   await _get();
-      // }
     } else {
-      logger.w('Try to get folders for same project');
+      logger.w('No need to request folders for same project');
     }
   }
 
   Future<void> _get() async {
-    logger.d('Get folders for project $_projectID');
+    logger.d('Try to get folders for project $_projectID');
     ApiResponse _response = await _http.get('prj/folder', params: {'save_id': _projectID});
     _status = _response.status;
     if (_response.status == ApiStatus.OK) {
       _folders = await compute(_isolate, _response.data);
-      // _folders = List.from(_response.json).map((e) => ModelFolder.fromJson(e)).toList();
-      // _folders.sort((a, b) => a.position.compareTo(b.position));
       _selected ??= _folders.isNotEmpty ? _folders.first : null;
       logger.i('Get ${_folders.length} folders');
     } else {
@@ -77,7 +68,7 @@ class NotifierFolders with ChangeNotifier {
   }
 
   void create(String name) async {
-    logger.d('Create folder $name for project $_projectID');
+    logger.d('Try to create folder $name for project $_projectID');
     ApiResponse _response = await _http.post('prj/folder/', data: {'save_id': _projectID, 'name': name});
     if (_response.status == ApiStatus.OK) {
       ModelFolder _folder = ModelFolder.fromJson(_response.json);

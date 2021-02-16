@@ -40,10 +40,20 @@ class NotifierProjects with ChangeNotifier {
     return List.from(_json).map((e) => ModelProject.fromJson(e)).toList();
   }
 
-  // Future<ModelProject> projectAdd(String name, String iChars, int langOrig, List translate) async {
-  //   var _payload = {'name': name, 'icon_chars': iChars, 'lang_orig': langOrig, 'translate_to': translate};
-  //   return await _httpClient.post('prj', data: _payload).then((value) => ModelProject.fromJson(value));
-  // }
+  Future<ModelProject> create(ModelNewProject project) async {
+    logger.d('Try to create project ${project.name}');
+    ApiResponse _response = await http.post('prj/', data: project.apiMap);
+    if (_response.status == ApiStatus.OK) {
+      ModelProject _project = ModelProject.fromJson(_response.json);
+      _projects.add(_project);
+      logger.i('Created $_project');
+      return _project;
+    } else {
+      logger.w('Create project ${project.name} fail - ${_response.message}');
+    }
+    return null;
+  }
+
   //
   // Future<ModelProject> projectUpdate(ModelProject project) async {
   //   var _payload = project.apiMap;

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:localize/model/project.dart';
-import 'file:///C:/Projects/Flutter/localize/lib/ui/components/project_chars.dart';
+import 'package:localize/notifier/projects.dart';
+import 'package:localize/ui/components/project_chars.dart';
 
 import 'buttons.dart';
 
@@ -57,6 +59,8 @@ class _UiAddProjectNamingState extends State<UiAddProjectNaming> {
 
   @override
   Widget build(BuildContext context) {
+    final List<String> _names = context.read<NotifierProjects>().names;
+
     return Form(
       key: _namingFormKey,
       child: Column(
@@ -73,6 +77,8 @@ class _UiAddProjectNamingState extends State<UiAddProjectNaming> {
               RegExp regex = new RegExp(pattern);
               if (!regex.hasMatch(name))
                 return 'Invalid project name';
+              else if (_names.contains(name))
+                return 'Game with this name already exist';
               else
                 return null;
             },
@@ -87,18 +93,12 @@ class _UiAddProjectNamingState extends State<UiAddProjectNaming> {
           const SizedBox(height: 12.0),
           Row(
             children: [
-              Expanded(
-                flex: 1,
-                child: const SizedBox(),
-              ),
+              Expanded(flex: 1, child: const SizedBox()),
               UiProjectIconChars(
                 iChars: _charsController.text.length > 0 ? _charsController.text : 'xx',
                 scale: 3,
               ),
-              Expanded(
-                flex: 2,
-                child: const SizedBox(),
-              ),
+              Expanded(flex: 2, child: const SizedBox()),
               Expanded(
                 flex: 4,
                 child: TextFormField(

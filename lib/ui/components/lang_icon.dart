@@ -13,8 +13,7 @@ class UiLanguageIcon extends StatelessWidget {
     final List<ModelLanguage> _languages = context.read<NotifierSystem>().languages;
     final _language = _languages.firstWhere((lang) => lang.id == languageID);
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 8.0),
-      padding: EdgeInsets.symmetric(horizontal: 8.0),
+      padding: const EdgeInsets.symmetric(horizontal: UiServiceSizing.padding),
       decoration:
           BoxDecoration(border: Border.all(color: Color(0xFFFFFFFF)), borderRadius: BorderRadius.circular(12.0)),
       child: Text('${_language.shortName}'.capitalize()),

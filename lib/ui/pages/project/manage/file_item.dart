@@ -21,10 +21,11 @@ class UiFileListItem extends StatelessWidget {
 
     const double _padding = UiServiceSizing.padding;
     final _tTheme = Theme.of(context).textTheme;
-    Widget _name() => Container(
-          padding: const EdgeInsets.only(bottom: _padding / 2, left: _padding, right: _padding),
-          child: Text(file.name, style: _tTheme.headline6),
-        );
+
+    Widget _name = Container(
+      padding: const EdgeInsets.only(bottom: _padding / 2, left: _padding, right: _padding),
+      child: Text(file.name, style: _tTheme.headline6),
+    );
 
     return IntrinsicHeight(
       child: Column(
@@ -35,10 +36,10 @@ class UiFileListItem extends StatelessWidget {
             padding: const EdgeInsets.only(right: _padding),
             child: Row(
               children: [
-                if (!_nav.project.permissions.canTranslate) _name(),
+                if (!_nav.project.permissions.canTranslate) _name,
                 if (_nav.project.permissions.canTranslate)
                   TextButton(
-                      child: _name(),
+                      child: _name,
                       onPressed: () {
                         _nav.file = file;
                         _nav.navigate(NavChoice.FILE);
@@ -110,7 +111,7 @@ class UiFileListItem extends StatelessWidget {
                       child: Column(
                         children: [
                           Padding(
-                            padding: const EdgeInsets.only(left: _padding * 5.7),
+                            padding: const EdgeInsets.only(left: _padding * 4.5),
                             child: Text('Progress', style: _tTheme.caption),
                           ),
                           Expanded(

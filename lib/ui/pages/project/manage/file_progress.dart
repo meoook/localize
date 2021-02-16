@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:localize/model/progress.dart';
 import 'package:localize/ui/components/lang_icon.dart';
+import 'package:localize/ui/utils.dart';
 
 class UiFileItemProgress extends StatelessWidget {
   final ModelProgress progress;
@@ -21,6 +22,7 @@ class UiFileItemProgress extends StatelessWidget {
     return Row(
       children: [
         UiLanguageIcon(languageID: progress.language),
+        const SizedBox(width: UiServiceSizing.padding / 2),
         Expanded(
           child: Stack(
             alignment: Alignment.center,

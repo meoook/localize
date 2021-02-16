@@ -4,14 +4,14 @@ class UiAddProjectProgress extends StatelessWidget {
   final int step;
   const UiAddProjectProgress({Key key, @required this.step}) : super(key: key);
 
-  static const List<String> _stepNames = ['', 'Project naming', 'Project localize', 'Summary'];
+  static const List<String> _stepNames = ['', 'Game naming', 'Game localize', 'Summary'];
 
   @override
   Widget build(BuildContext context) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text('Create new project cloud storage', style: Theme.of(context).textTheme.headline4),
+        Text('Create new game cloud storage', style: Theme.of(context).textTheme.headline4),
         const SizedBox(height: 24.0),
         Stack(
           alignment: Alignment.center,

@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import 'package:localize/notifier/navigator.dart';
+import 'package:localize/notifier/projects.dart';
 import 'package:localize/model/project.dart';
 
 import 'final.dart';
@@ -15,19 +19,29 @@ class _UiPageProjectAddState extends State<UiPageProjectAdd> {
   ModelNewProject _project = ModelNewProject();
   int _step = 1;
 
-  void _prev() {
-    if (_step > 1) setState(() => _step -= 1);
-  }
+  void _prev() => (_step > 1) ? setState(() => _step -= 1) : null;
 
   void _next() {
-    print('NEXT');
-    if (_step == 1) {
-      _step += 1;
-    } else if (_step == 2) {
-      _step += 1;
-    } else
-      print("FINISH $_step");
-    setState(() {});
+    if ([1, 2].contains(_step))
+      setState(() => _step += 1);
+    else
+      _finish();
+  }
+
+  void _finish() async {
+    final ProviderNavigator _navigator = this.context.read<ProviderNavigator>();
+
+    _navigator.project = null;
+    _navigator.navigate(NavChoice.PROJECTS);
+
+    final ModelProject _new = await this.context.read<NotifierProjects>().create(_project);
+    if (_new == null)
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error creating game ${_project.name}')),
+      );
+
+    _navigator.project = _new;
+    _navigator.navigate(NavChoice.PROJECTS);
   }
 
   @override

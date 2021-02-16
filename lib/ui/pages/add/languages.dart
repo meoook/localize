@@ -48,28 +48,45 @@ class _UiAddProjectLanguagesState extends State<UiAddProjectLanguages> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Select original language. New uploaded files will be parsed using this language.',
-            style: Theme.of(context).textTheme.caption),
-        const SizedBox(height: _padding / 4),
+        Text(
+          'Select original language.\nNew uploaded files will be parsed using this language.',
+          style: Theme.of(context).textTheme.subtitle1.copyWith(color: Theme.of(context).primaryColorLight),
+        ),
+        const SizedBox(height: _padding / 2),
         Row(
           children: [
             UiLanguageSelect(languages: _languages, selected: widget.project.langOriginal, onSelect: _onChangeOriginal),
-            UiLanguageIcon(languageID: widget.project.langOriginal),
+            Container(
+                margin: EdgeInsets.symmetric(horizontal: _padding),
+                child: UiLanguageIcon(languageID: widget.project.langOriginal)),
           ],
         ),
         const SizedBox(height: _padding),
-        Text('Select languages to translate uploaded files.', style: Theme.of(context).textTheme.caption),
-        const SizedBox(height: _padding / 4),
+        Text(
+          'Select languages to translate uploaded files.',
+          style: Theme.of(context).textTheme.subtitle1.copyWith(color: Theme.of(context).primaryColorLight),
+        ),
+        const SizedBox(height: _padding / 2),
         Row(
           children: [
             UiLanguageMSelect(languages: _choicesTranslate(), onSelect: _trAdd),
-            Wrap(children: [
-              ...widget.project.translateTo.map((e) => UiLanguageIcon(languageID: e)),
-              if (widget.project.translateTo.isEmpty) Container(child: Text('Select languages to translate')),
+            Row(children: [
+              ...widget.project.translateTo.map((langID) => RawMaterialButton(
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(_padding)),
+                    onPressed: () => _trRemove(langID),
+                    child: UiLanguageIcon(languageID: langID),
+                    constraints: BoxConstraints(minWidth: 0, minHeight: 0, maxHeight: _padding * 5),
+                  )),
+              if (widget.project.translateTo.isEmpty)
+                Container(
+                  // margin: const EdgeInsets.symmetric(horizontal: _padding),
+                  margin: const EdgeInsets.symmetric(horizontal: _padding, vertical: _padding * 1.7),
+                  child: Text('No languages selected', style: Theme.of(context).textTheme.subtitle1),
+                ),
             ]),
           ],
         ),
-        UiAddProjectButtons(step: 2, prev: widget.prev, next: widget.next),
+        UiAddProjectButtons(step: 2, prev: widget.prev, next: widget.project.translateTo.isEmpty ? null : widget.next),
         // UiLanguageSelectXX(onSelect: _onSelect),
       ],
     );
