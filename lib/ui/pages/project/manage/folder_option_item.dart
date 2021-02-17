@@ -17,7 +17,7 @@ class UiFolderOptionItem extends StatelessWidget {
       hoverColor: Colors.white10,
       splashColor: Theme.of(context).splashColor,
       elevation: _padding / 2,
-      padding: const EdgeInsets.symmetric(vertical: _padding, horizontal: _padding * 2),
+      padding: const EdgeInsets.symmetric(horizontal: _padding * 2, vertical: _padding),
       onPressed: onPressed,
       shape: const StadiumBorder(),
       textStyle: active

@@ -26,7 +26,6 @@ class NotifierProjects with ChangeNotifier {
     ApiResponse _response = await http.get('prj');
     _status = _response.status;
     if (_response.status == ApiStatus.OK) {
-      // _projects = List.from(_response.json).map((e) => ModelProject.fromJson(e)).toList();
       _projects = await compute(_isolate, _response.data);
       logger.i('Get ${_projects.length} projects');
     } else {
@@ -40,7 +39,7 @@ class NotifierProjects with ChangeNotifier {
     return List.from(_json).map((e) => ModelProject.fromJson(e)).toList();
   }
 
-  Future<ModelProject> create(ModelNewProject project) async {
+  Future<ModelProject> create(ModelProjectBase project) async {
     logger.d('Try to create project ${project.name}');
     ApiResponse _response = await http.post('prj/', data: project.apiMap);
     if (_response.status == ApiStatus.OK) {
@@ -54,11 +53,21 @@ class NotifierProjects with ChangeNotifier {
     return null;
   }
 
-  //
-  // Future<ModelProject> projectUpdate(ModelProject project) async {
-  //   var _payload = project.apiMap;
-  //   return await _httpClient.post('prj/${project.id}', data: _payload).then((value) => ModelProject.fromJson(value));
-  // }
+  Future<void> update(String projectID, ModelProjectBase project) async {
+    logger.d('Try to update project id $projectID (new name ${project.name})');
+    ApiResponse _response = await http.put('prj/$projectID/', data: project.apiMap);
+    if (_response.status == ApiStatus.OK) {
+      ModelProject _project = ModelProject.fromJson(_response.json);
+      final int _idx = _projects.indexWhere((_prj) => _prj.id == projectID);
+      _projects[_idx] = _project;
+      logger.i('Updated $_project');
+      notifyListeners();
+      // return true;
+    } else {
+      logger.w('Update project ${project.name} fail - ${_response.message}');
+    }
+    // return false;
+  }
   //
   // Future<bool> projectDelete(String projectID) async {
   //   return await _httpClient.request(Method.DELETE, 'prj/$projectID');
@@ -80,6 +89,15 @@ class NotifierProjects with ChangeNotifier {
 
 }
 
-class AnyClass<T> {
-  T data;
+class ProviderProject extends ModelProjectBase {
+  Function _checkNaming;
+  set setCheck(Function check) => _checkNaming = check;
+
+  bool checkNaming() => _checkNaming != null ? _checkNaming() : false;
+
+  bool checkLocales() => this.translateTo.isNotEmpty;
+
+  bool get isOk => checkNaming() && checkLocales();
+
+  ProviderProject(ModelProjectBase project) : super.fromJson(project.apiMap);
 }

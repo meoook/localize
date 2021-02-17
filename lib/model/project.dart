@@ -1,6 +1,6 @@
 import 'package:localize/services/permissions.dart';
 
-class ModelProject extends ModelNewProject {
+class ModelProject extends ModelProjectBase {
   final String id;
   final String author;
   final DateTime created;
@@ -17,15 +17,15 @@ class ModelProject extends ModelNewProject {
         super.fromJson(json);
 }
 
-class ModelNewProject {
+class ModelProjectBase {
   String name;
   String iChars;
   int langOriginal;
   List<int> translateTo = [];
 
-  ModelNewProject();
+  ModelProjectBase();
 
-  ModelNewProject.fromJson(Map<String, dynamic> json)
+  ModelProjectBase.fromJson(Map<String, dynamic> json)
       : name = json['name'],
         iChars = json['icon_chars'],
         langOriginal = json['lang_orig'],

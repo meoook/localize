@@ -107,7 +107,9 @@ class ServiceHttpClient {
     try {
       // final _payload = data != null ? jsonEncode(data) : jsonEncode({'any': 'data'});
       final _payload = jsonEncode(data);
-      final _response = await http.post(uri, headers: _headers, body: _payload);
+      final _response = (isPut)
+          ? await http.put(uri, headers: _headers, body: _payload)
+          : await http.post(uri, headers: _headers, body: _payload);
       return ApiResponse(_response);
     } on SocketException {
       return ApiResponse.noConnect();

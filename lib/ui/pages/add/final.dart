@@ -1,24 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:localize/model/project.dart';
+import 'package:localize/notifier/projects.dart';
 import 'package:localize/ui/components/lang_icon.dart';
 import 'package:localize/ui/components/project_chars.dart';
 import 'package:localize/ui/utils.dart';
 
-import 'buttons.dart';
-
 class UiAddProjectFinal extends StatelessWidget {
-  final ModelNewProject project;
-  final Function prev;
-  final Function next;
+  final ProviderProject project;
 
-  const UiAddProjectFinal({Key key, @required this.project, @required this.prev, @required this.next})
-      : super(key: key);
+  const UiAddProjectFinal({Key key, @required this.project}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     var _labelTheme = Theme.of(context).textTheme.headline5.copyWith(color: Theme.of(context).primaryColorLight);
     var _valueTheme = Theme.of(context).textTheme.headline5;
     return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         UiProjectIconChars(iChars: project.iChars, scale: 2),
         Row(
@@ -49,7 +45,6 @@ class UiAddProjectFinal extends StatelessWidget {
             ),
           ],
         ),
-        UiAddProjectButtons(step: 3, prev: prev, next: next),
       ],
     );
   }

@@ -3,9 +3,6 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:localize/ui/utils.dart';
 
-import 'folder_item.dart';
-import 'folder_option_item.dart';
-
 class UiManageHelp extends StatelessWidget {
   final bool firstDone;
 
@@ -58,10 +55,16 @@ class _HelpStep extends StatelessWidget {
       constraints: BoxConstraints(maxHeight: 80.0, maxWidth: 400.0),
       margin: const EdgeInsets.only(left: _padding, top: _padding),
       decoration: BoxDecoration(
-        border: Border.all(width: 1.0),
-        borderRadius: BorderRadius.circular(4.0),
-        color: Color(0x16FFFFFF),
-      ),
+          border: Border.all(width: 1.0),
+          borderRadius: BorderRadius.circular(4.0),
+          // color: Color(0x16FFFFFF),
+          gradient: LinearGradient(
+            colors: <Color>[
+              // const Color(0x33000000),
+              const Color(0x26FFFFFF),
+              const Color(0x16FFFFFF),
+            ],
+          )),
       child: Stack(
         alignment: Alignment(-0.7, 0.0),
         children: [
@@ -97,8 +100,8 @@ class _HelpStep extends StatelessWidget {
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: <Color>[
-                      const Color(0xFF111133),
-                      const Color(0x33000000),
+                      const Color(0xEE111133),
+                      const Color(0x55000000),
                     ],
                   ),
                 ),

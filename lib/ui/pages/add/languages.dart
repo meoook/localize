@@ -1,21 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:localize/notifier/projects.dart';
 import 'package:localize/ui/components/lang_icon.dart';
 import 'package:localize/ui/utils.dart';
 import 'package:provider/provider.dart';
 import 'package:localize/model/language.dart';
-import 'package:localize/model/project.dart';
 import 'package:localize/notifier/system.dart';
 import 'package:localize/ui/components/lang_select.dart';
 
-import 'buttons.dart';
-
 class UiAddProjectLanguages extends StatefulWidget {
-  final ModelNewProject project;
-  final Function prev;
-  final Function next;
+  final ProviderProject project;
 
-  const UiAddProjectLanguages({Key key, @required this.project, @required this.prev, @required this.next})
-      : super(key: key);
+  const UiAddProjectLanguages({Key key, @required this.project}) : super(key: key);
 
   @override
   _UiAddProjectLanguagesState createState() => _UiAddProjectLanguagesState();
@@ -47,6 +42,7 @@ class _UiAddProjectLanguagesState extends State<UiAddProjectLanguages> {
     const double _padding = UiServiceSizing.padding;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
           'Select original language.\nNew uploaded files will be parsed using this language.',
@@ -79,15 +75,15 @@ class _UiAddProjectLanguagesState extends State<UiAddProjectLanguages> {
                   )),
               if (widget.project.translateTo.isEmpty)
                 Container(
-                  // margin: const EdgeInsets.symmetric(horizontal: _padding),
                   margin: const EdgeInsets.symmetric(horizontal: _padding, vertical: _padding * 1.7),
-                  child: Text('No languages selected', style: Theme.of(context).textTheme.subtitle1),
+                  child: Text(
+                    'No languages selected',
+                    style: Theme.of(context).textTheme.subtitle1.copyWith(color: Theme.of(context).errorColor),
+                  ),
                 ),
             ]),
           ],
         ),
-        UiAddProjectButtons(step: 2, prev: widget.prev, next: widget.project.translateTo.isEmpty ? null : widget.next),
-        // UiLanguageSelectXX(onSelect: _onSelect),
       ],
     );
   }

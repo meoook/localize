@@ -1,18 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:localize/model/project.dart';
 import 'package:localize/notifier/projects.dart';
 import 'package:localize/ui/components/project_chars.dart';
 
-import 'buttons.dart';
-
 class UiAddProjectNaming extends StatefulWidget {
-  final ModelNewProject project;
-  final Function prev;
-  final Function next;
+  final ProviderProject project;
 
-  const UiAddProjectNaming({Key key, @required this.project, @required this.prev, @required this.next})
-      : super(key: key);
+  const UiAddProjectNaming({Key key, @required this.project}) : super(key: key);
 
   @override
   _UiAddProjectNamingState createState() => _UiAddProjectNamingState();
@@ -26,17 +20,16 @@ class _UiAddProjectNamingState extends State<UiAddProjectNaming> {
   @override
   void initState() {
     super.initState();
-    // Set names if set
     _nameController.text = widget.project.name;
     _charsController.text = widget.project.iChars;
     // Start listening to changes.
     _nameController.addListener(_handleNameChange);
     _charsController.addListener(_handCharsChange);
+    widget.project.setCheck = _canNext;
   }
 
   @override
   void dispose() {
-    // Clean up the controller when the Widget is disposed
     _nameController.dispose();
     _charsController.dispose();
     super.dispose();
@@ -50,9 +43,9 @@ class _UiAddProjectNamingState extends State<UiAddProjectNaming> {
     setState(() {});
   }
 
-  void _handCharsChange() => setState(() {});
+  void _handCharsChange() => setState(() => widget.project.iChars = _charsController.text.toString());
 
-  bool get _canNext =>
+  bool _canNext() =>
       _nameController.text.isNotEmpty &&
       _charsController.text.isNotEmpty &&
       (_namingFormKey?.currentState?.validate() ?? false);
@@ -60,10 +53,11 @@ class _UiAddProjectNamingState extends State<UiAddProjectNaming> {
   @override
   Widget build(BuildContext context) {
     final List<String> _names = context.read<NotifierProjects>().names;
-
     return Form(
       key: _namingFormKey,
       child: Column(
+        // crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const SizedBox(height: 16),
           TextFormField(
@@ -102,6 +96,7 @@ class _UiAddProjectNamingState extends State<UiAddProjectNaming> {
               Expanded(
                 flex: 4,
                 child: TextFormField(
+                  maxLength: 2,
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   textInputAction: TextInputAction.done,
                   controller: _charsController,
@@ -119,14 +114,13 @@ class _UiAddProjectNamingState extends State<UiAddProjectNaming> {
                     // prefixIcon: Icon(Icons.check_box_outline_blank),
                     prefixText: "Letters for icon: ",
                     // labelText: "Chars for icon",
-                    helperText: "Enter 2 letters for project icon",
+                    helperText: "Enter 2 letters for icon",
                     border: OutlineInputBorder(borderRadius: BorderRadius.circular(12.0)),
                   ),
                 ),
               ),
             ],
           ),
-          UiAddProjectButtons(step: 1, prev: widget.prev, next: _canNext ? widget.next : null),
         ],
       ),
     );
