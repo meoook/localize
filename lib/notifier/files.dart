@@ -6,7 +6,7 @@ import 'package:localize/model/file.dart';
 import 'package:localize/services/http_client.dart';
 import 'package:localize/services/logger.dart';
 
-// FIXME: this class not finished
+// FIXME: this class not finished - check permissions
 
 class NotifierFiles with ChangeNotifier {
   final ServiceHttpClient _http;
@@ -71,11 +71,9 @@ class NotifierFiles with ChangeNotifier {
     ApiResponse _response = await _http.get('file', params: _params);
     _status = _response.status;
     if (_response.status == ApiStatus.OK) {
-      _total = _response.json['count'];
-      // _files = List.from(_response.json['results']).map((e) => ModelFile.fromJson(e)).toList();
-      // String _data = jsonEncode(_response.json['results']);
-      _files = await compute(_isolate, _response.data);
-      _files.sort((a, b) => a.warning.compareTo(b.warning));
+      var _data = await compute(_isolate, _response.data);
+      _files = _data['list'];
+      _total = _data['total'];
       logger.i('Get ${_files.length} of $_total files');
     } else {
       logger.w('Get files ${_response.message}');
@@ -83,9 +81,17 @@ class NotifierFiles with ChangeNotifier {
     notifyListeners();
   }
 
-  static List<ModelFile> _isolate(String data) {
+  static Map<String, dynamic> _isolate(String data) {
     var _json = jsonDecode(data);
-    return List.from(_json['results']).map((e) => ModelFile.fromJson(e)).toList();
+    var _list = List.from(_json['results']).map((e) => ModelFile.fromJson(e)).toList();
+    _list.sort((a, b) {
+      var _errComp = b.error.compareTo(a.error);
+      if (_errComp != 0) return _errComp;
+      var _warnComp = b.warning.compareTo(a.warning);
+      if (_warnComp != 0) return _warnComp;
+      return b.created.compareTo(a.created);
+    });
+    return <String, dynamic>{'list': _list, 'total': _json['count']};
   }
 
   void change(ModelFile file) async {

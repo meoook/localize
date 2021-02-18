@@ -29,7 +29,6 @@ class ModelFile {
         items = json['items'],
         words = json['words'],
         langOriginal = json['lang_orig'],
-        // progress = json['translated_set'].map((_json) => ModelProgress.fromJson(_json, json['items'])).toList(),
         progress = List.from(json['translated_set']).map((e) => ModelProgress.fromJson(e, json['items'])).toList(),
         repoStatus = json['repo_status'],
         warning = json['warning'],

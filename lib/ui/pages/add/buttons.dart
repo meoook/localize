@@ -14,7 +14,6 @@ class UiAddProjectButtons extends StatelessWidget {
       : super(key: key);
 
   bool get _canNext {
-    print('Can next $step ${project.checkNaming()} ${project.checkLocales()}');
     if (step == 1) return project.checkNaming();
     if (step == 2) return project.checkLocales();
     return true;

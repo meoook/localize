@@ -5,8 +5,9 @@ import 'package:localize/ui/components/project_chars.dart';
 
 class UiAddProjectNaming extends StatefulWidget {
   final ProviderProject project;
+  final String name;
 
-  const UiAddProjectNaming({Key key, @required this.project}) : super(key: key);
+  const UiAddProjectNaming({Key key, @required this.project, this.name}) : super(key: key);
 
   @override
   _UiAddProjectNamingState createState() => _UiAddProjectNamingState();
@@ -25,6 +26,7 @@ class _UiAddProjectNamingState extends State<UiAddProjectNaming> {
     // Start listening to changes.
     _nameController.addListener(_handleNameChange);
     _charsController.addListener(_handCharsChange);
+    // set check function in provider
     widget.project.setCheck = _canNext;
   }
 
@@ -53,10 +55,10 @@ class _UiAddProjectNamingState extends State<UiAddProjectNaming> {
   @override
   Widget build(BuildContext context) {
     final List<String> _names = context.read<NotifierProjects>().names;
+    if (widget.name != null) _names.remove(widget.name);
     return Form(
       key: _namingFormKey,
       child: Column(
-        // crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const SizedBox(height: 16),
@@ -90,7 +92,7 @@ class _UiAddProjectNamingState extends State<UiAddProjectNaming> {
               Expanded(flex: 1, child: const SizedBox()),
               UiProjectIconChars(
                 iChars: _charsController.text.length > 0 ? _charsController.text : 'xx',
-                scale: 3,
+                scale: widget.name == null ? 2 : 3,
               ),
               Expanded(flex: 2, child: const SizedBox()),
               Expanded(
@@ -114,7 +116,7 @@ class _UiAddProjectNamingState extends State<UiAddProjectNaming> {
                     // prefixIcon: Icon(Icons.check_box_outline_blank),
                     prefixText: "Letters for icon: ",
                     // labelText: "Chars for icon",
-                    helperText: "Enter 2 letters for icon",
+                    helperText: "Enter letters for icon",
                     border: OutlineInputBorder(borderRadius: BorderRadius.circular(12.0)),
                   ),
                 ),

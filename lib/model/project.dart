@@ -1,10 +1,10 @@
-import 'package:localize/services/permissions.dart';
+import 'package:localize/services/access.dart';
 
 class ModelProject extends ModelProjectBase {
   final String id;
   final String author;
   final DateTime created;
-  final ServicePermissions permissions;
+  final ServiceAccess permissions;
 
   @override
   String toString() => 'project $name id $id';
@@ -13,7 +13,7 @@ class ModelProject extends ModelProjectBase {
       : id = json['save_id'],
         author = json['author'],
         created = DateTime.parse(json['created']),
-        permissions = ServicePermissions(json['permissions_set']),
+        permissions = ServiceAccess(json['permissions_set']),
         super.fromJson(json);
 }
 

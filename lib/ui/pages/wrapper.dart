@@ -19,7 +19,7 @@ class UiPageNavWrapper extends StatelessWidget {
 
     return MultiProvider(
       providers: [
-        Provider<ProviderNavigator>(create: (_) => ProviderNavigator()),
+        Provider<ProviderNavigator>(create: (_) => ProviderNavigator(_root.http)),
         ChangeNotifierProvider<NotifierProjects>(create: (_) => NotifierProjects(_root.http)..init()),
       ],
       child: Scaffold(
@@ -83,7 +83,7 @@ class _UiPageNavigatorState extends State<UiPageNavigator> {
         UiNavBar(),
         Expanded(
           child: AnimatedSwitcher(
-            duration: Duration(milliseconds: 500),
+            duration: Duration(milliseconds: 400),
             // transitionBuilder: (Widget child, Animation<double> animation) => ScaleTransition(scale: animation, child: child),
             // transitionBuilder: (Widget child, Animation<double> animation) {
             //   final offsetAnimation = Tween<Offset>(begin: Offset(0.0, -1.0), end: Offset(0.0, 0.0)).animate(animation);

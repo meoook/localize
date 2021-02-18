@@ -53,7 +53,7 @@ class NotifierProjects with ChangeNotifier {
     return null;
   }
 
-  Future<void> update(String projectID, ModelProjectBase project) async {
+  Future<ModelProject> update(String projectID, ModelProjectBase project) async {
     logger.d('Try to update project id $projectID (new name ${project.name})');
     ApiResponse _response = await http.put('prj/$projectID/', data: project.apiMap);
     if (_response.status == ApiStatus.OK) {
@@ -61,12 +61,12 @@ class NotifierProjects with ChangeNotifier {
       final int _idx = _projects.indexWhere((_prj) => _prj.id == projectID);
       _projects[_idx] = _project;
       logger.i('Updated $_project');
-      notifyListeners();
-      // return true;
+      // notifyListeners();
+      return _project;
     } else {
       logger.w('Update project ${project.name} fail - ${_response.message}');
     }
-    // return false;
+    return null;
   }
   //
   // Future<bool> projectDelete(String projectID) async {

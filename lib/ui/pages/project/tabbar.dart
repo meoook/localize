@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:localize/services/permissions.dart';
+import 'package:localize/services/access.dart';
 import 'package:localize/ui/utils.dart';
 
 class UiProjectTabBar extends StatelessWidget {

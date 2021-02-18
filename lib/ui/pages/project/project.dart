@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:localize/notifier/navigator.dart';
-import 'package:localize/services/permissions.dart';
+import 'package:localize/services/access.dart';
 
 import 'package:localize/ui/pages/projects/card.dart';
 import 'package:localize/ui/pages/404.dart';

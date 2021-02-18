@@ -36,8 +36,8 @@ class UiFileListItem extends StatelessWidget {
             padding: const EdgeInsets.only(right: _padding),
             child: Row(
               children: [
-                if (!_nav.project.permissions.canTranslate) _name,
-                if (_nav.project.permissions.canTranslate)
+                if (!_nav.project.permissions.canTranslate || isError) _name,
+                if (_nav.project.permissions.canTranslate && !isError)
                   TextButton(
                       child: _name,
                       onPressed: () {
@@ -84,9 +84,9 @@ class UiFileListItem extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text('Created ${file.created.getDate}', style: _tTheme.caption),
-                        Text('Method ${file.method}', style: _tTheme.overline),
+                        Text('Method ${file.method.isNotEmpty ? file.method : 'unknown'}', style: _tTheme.overline),
                         if (file.warning.isNotEmpty)
-                          Text('Warning ${file.warning}', style: _tTheme.bodyText1.copyWith(color: Colors.amber)),
+                          Text(file.warning, style: _tTheme.bodyText1.copyWith(color: Colors.amber)),
                       ],
                     ),
                   ),
@@ -146,8 +146,8 @@ class UiFileListItem extends StatelessWidget {
                   ],
                   if (isError)
                     Expanded(
-                      flex: 4,
-                      child: Text('Error ${file.error}', style: _tTheme.headline5.copyWith(color: Colors.redAccent)),
+                      flex: 5,
+                      child: Text(file.error, style: _tTheme.headline5.copyWith(color: Colors.redAccent)),
                     ),
                 ],
                 // ),

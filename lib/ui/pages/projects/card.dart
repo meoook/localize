@@ -40,8 +40,8 @@ class UiProjectCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 const Spacer(),
-                Text('author: ${project.author}', style: _tTheme.caption, textScaleFactor: _scale),
-                Text('created: ${project.created.getDate}', style: _tTheme.caption, textScaleFactor: _scale),
+                Text('author ${project.author}', style: _tTheme.caption, textScaleFactor: _scale),
+                Text('created ${project.created.getDate}', style: _tTheme.caption, textScaleFactor: _scale),
               ],
             ),
           ],

@@ -4,7 +4,7 @@ enum AccessPage { MANAGE, ACCESS, CHANGE }
 //   String get text => this.toString().split('.').last;
 // }
 
-class ServicePermissions {
+class ServiceAccess {
   // final List<AccessLevel> _choices = AccessLevel.values.toList();
   List<AccessLevel> _permissions = [];
   List<AccessLevel> get list => _permissions;
@@ -23,7 +23,7 @@ class ServicePermissions {
   bool get canTranslate => isOwner || isTranslator;
   bool get canManage => isOwner || isManager;
 
-  ServicePermissions(List<dynamic> permissions) {
+  ServiceAccess(List<dynamic> permissions) {
     if (permissions.isEmpty) _permissions.add(AccessLevel.OWNER);
     if (permissions.contains(9)) _permissions.add(AccessLevel.ADMIN);
     if (permissions.contains(8)) _permissions.add(AccessLevel.MANAGE);

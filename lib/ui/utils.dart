@@ -4,7 +4,8 @@ extension StringExtension on String {
 }
 
 extension DateTimeExtension on DateTime {
-  String get getDate => '$day.$month.$year';
+  String get getDate => '${_two(day)}.${_two(month)}.${_two(year)}';
+  static String _two(int n) => (n >= 10) ? "$n" : "0$n";
 }
 
 class UiServiceSizing {
