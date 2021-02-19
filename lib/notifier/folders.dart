@@ -9,7 +9,7 @@ import 'package:localize/services/logger.dart';
 class NotifierFolders with ChangeNotifier {
   final ServiceHttpClient _http;
 
-  String _projectID;
+  final String _projectID;
 
   ApiStatus _status = ApiStatus.LOADING;
   ApiStatus get status => _status;
@@ -18,32 +18,23 @@ class NotifierFolders with ChangeNotifier {
   ModelFolder get selected => _selected;
   set selected(ModelFolder folder) {
     if (_selected == folder) return;
-    logger.d('Changing selected folder to $folder');
     _selected = folder;
+    logger.d('Changing selected folder to $folder');
     notifyListeners();
   }
 
-  List<ModelFolder> _folders = [];
+  List<ModelFolder> _folders;
   List<ModelFolder> get list => _folders;
   List<String> get names => _folders.map((e) => e.name).toList();
 
   // FIXME: not used
   ModelFolder byID(int folderID) => _folders?.firstWhere((_e) => _e.id == folderID);
 
-  NotifierFolders(this._http) {
-    logger.d('Initialize folders...');
-  }
-
-  void project(String projectID) async {
-    if (projectID == null)
-      logger.e('Project changed to $projectID');
-    else if (_projectID != projectID) {
-      _projectID = projectID;
-      _selected = null;
-      await _get();
-    } else {
-      logger.w('No need to request folders for same project');
-    }
+  NotifierFolders(this._http, this._projectID) {
+    if (_projectID != null)
+      this._get();
+    else
+      logger.w('Can\'t request folders if no project');
   }
 
   Future<void> _get() async {

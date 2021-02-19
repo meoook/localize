@@ -11,6 +11,8 @@ import 'package:localize/services/logger.dart';
 import 'package:localize/services/options.dart';
 
 class NotifierSystem with ChangeNotifier {
+  /// Main system class - runner, options, auth systems
+
   final ServiceHttpClient http = ServiceHttpClient();
   final ServiceOptions _options = ServiceOptions();
   ApiStatus _status = ApiStatus.ERROR; // Auth status
@@ -41,7 +43,7 @@ class NotifierSystem with ChangeNotifier {
   }
 
   Future<void> _languagesGet() async {
-    logger.d('Initialize languages...');
+    logger.d('Try to get languages...');
     ApiResponse _response = await http.get('lang');
     if (_response.status == ApiStatus.OK) {
       _languages = await compute(_isolate, _response.data);
@@ -58,7 +60,7 @@ class NotifierSystem with ChangeNotifier {
 
   Future<void> _auth(String token) async {
     if (token == null) throw 'set token for auth';
-    logger.d('Auth user with token $token');
+    logger.d('Try to auth user with token $token');
     http.token = token;
     ApiResponse _response = await http.get('auth/user');
     _status = _response.status;
@@ -99,8 +101,8 @@ class NotifierSystem with ChangeNotifier {
     logger.i('User ${user.name} logout');
     await _options.optionChange(OptionKey.TOKEN, null);
     ApiResponse _response = await http.post('auth/logout');
-    http.token = null;
     if (_response.status != ApiStatus.OK) logger.e('Logout err ${_response.message}');
+    http.token = null;
     _user = null;
     _status = ApiStatus.ERROR;
     this.reset();

@@ -17,6 +17,12 @@ class UiFolderItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    TextStyle _style() {
+      if (isCreate) return Theme.of(context).textTheme.subtitle1;
+      if (active) return Theme.of(context).textTheme.subtitle1.copyWith(color: Theme.of(context).accentColor);
+      return Theme.of(context).textTheme.subtitle2;
+    }
+
     const double _padding = UiServiceSizing.padding;
     return RawMaterialButton(
       fillColor: isCreate ? Colors.green : null,
@@ -26,9 +32,7 @@ class UiFolderItem extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: _padding, horizontal: _padding * 2.0),
       onPressed: onPressed,
       shape: const StadiumBorder(),
-      textStyle: active
-          ? Theme.of(context).textTheme.subtitle1.copyWith(color: Theme.of(context).accentColor)
-          : Theme.of(context).textTheme.subtitle1,
+      textStyle: _style(),
       child: Row(
         children: [
           isCreate ? Icon(Icons.create_new_folder) : Icon(Icons.folder),

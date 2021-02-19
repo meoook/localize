@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import 'package:localize/model/project.dart';
+import 'package:localize/notifier/project.dart';
+import 'package:localize/notifier/projects.dart';
 import 'package:localize/notifier/navigator.dart';
 import 'package:localize/ui/pages/add/buttons.dart';
 import 'package:localize/ui/pages/add/languages.dart';
@@ -10,6 +14,7 @@ class UiProjectChange extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ProviderNavigator _navigator = context.read<ProviderNavigator>();
+    final ModelProjectBase _edit = ModelProjectBase.fromJson(_navigator.project.apiMap);
     const _padding = UiServiceSizing.padding;
     return Container(
       alignment: Alignment.topCenter,
@@ -40,7 +45,6 @@ class UiProjectChange extends StatelessWidget {
                         onPressed: () async {
                           String _msg = 'Error saving game ${_navigator.project.name}';
                           if (project.isOk) {
-                            // final bool _success = await context.read<NotifierProjects>().update(_project.id, project);
                             ModelProject _project =
                                 await context.read<NotifierProjects>().update(_navigator.project.id, project);
                             if (_project != null) {

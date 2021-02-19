@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:localize/model/project.dart';
-import 'package:localize/ui/utils.dart';
 import 'package:provider/provider.dart';
+
+import 'package:localize/model/project.dart';
+import 'package:localize/notifier/project.dart';
 import 'package:localize/notifier/navigator.dart';
 import 'package:localize/notifier/projects.dart';
+import 'package:localize/ui/utils.dart';
 
 class UiAddProjectButtons extends StatelessWidget {
   final int step;
@@ -30,9 +32,7 @@ class UiAddProjectButtons extends StatelessWidget {
 
     final ModelProject _new = await context.read<NotifierProjects>().create(project);
     if (_new == null)
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error creating game ${project.name}')),
-      );
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error creating game ${project.name}')));
 
     _navigator.project = _new;
     _navigator.navigate(NavChoice.PROJECTS);

@@ -69,7 +69,7 @@ class NotifierAccess with ChangeNotifier {
     logger.d('Get list of users');
     ApiResponse _response = await _http.get('auth/users');
     if (_response.status == ApiStatus.OK) {
-      _names = _response.json as List<String>;
+      _names = List.from(_response.json).map((e) => e['first_name'].toString()).toList();
       logger.i('Get ${_names.length} user names');
       // notifyListeners();
     } else {

@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:localize/ui/pages/project/manage/help.dart';
 import 'package:provider/provider.dart';
-
 import 'package:localize/notifier/folders.dart';
 import 'package:localize/model/folder.dart';
-
 import 'file_list.dart';
 import 'folder_options.dart';
+import 'help.dart';
 
 class UiFolderManager extends StatefulWidget {
   @override
@@ -27,17 +25,17 @@ class _UiFolderManagerState extends State<UiFolderManager> {
   @override
   Widget build(BuildContext context) {
     ModelFolder _current = context.watch<NotifierFolders>().selected;
-
-    if (_current == null) return UiManageHelp();
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        UiFolderOptions(active: _selected, change: _change),
+        UiFolderOptions(selected: _selected, change: _change),
         const Divider(height: 1.0, thickness: 1.0),
-        if (_selected == FolderOption.LIST) UiFileList(key: UniqueKey(), folderID: _current.id),
-        if (_selected == FolderOption.ADD) Expanded(child: Container(color: Colors.red, child: Text('two'))),
-        if (_selected == FolderOption.MODIFY) Expanded(child: Container(color: Colors.green, child: Text('three'))),
+        if (_current == null) UiManageHelp(),
+        if (_current != null) ...[
+          if (_selected == FolderOption.LIST) UiFileList(key: UniqueKey(), folderID: _current.id),
+          if (_selected == FolderOption.ADD) Expanded(child: Container(color: Colors.red, child: Text('two'))),
+          if (_selected == FolderOption.MODIFY) Expanded(child: Container(color: Colors.green, child: Text('three'))),
+        ]
       ],
     );
   }

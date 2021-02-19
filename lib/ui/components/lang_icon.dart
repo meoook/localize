@@ -12,11 +12,12 @@ class UiLanguageIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     final List<ModelLanguage> _languages = context.read<NotifierSystem>().languages;
     final _language = _languages.firstWhere((lang) => lang.id == languageID);
+    final _theme = Theme.of(context);
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: UiServiceSizing.padding),
       decoration:
-          BoxDecoration(border: Border.all(color: Color(0xFFFFFFFF)), borderRadius: BorderRadius.circular(12.0)),
-      child: Text('${_language.shortName}'.capitalize()),
+          BoxDecoration(border: Border.all(color: _theme.primaryColor), borderRadius: BorderRadius.circular(12.0)),
+      child: Text('${_language.shortName}'.capitalize(), style: _theme.textTheme.bodyText1),
     );
   }
 }

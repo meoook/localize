@@ -10,7 +10,7 @@ import 'package:localize/services/logger.dart';
 
 class NotifierFiles with ChangeNotifier {
   final ServiceHttpClient _http;
-  String _projectID;
+  final String _projectID;
   int _folderID;
   // pagination
   int _size = 25;
@@ -29,45 +29,32 @@ class NotifierFiles with ChangeNotifier {
   //   notifyListeners();
   // }
 
-  List<ModelFile> _files = [];
+  List<ModelFile> _files;
   List<ModelFile> get list => _files;
 
-  NotifierFiles(this._http) {
+  NotifierFiles(this._http, this._projectID) {
     logger.d('Initialize files...');
   }
 
   Map<String, String> get _params => {
         'save_id': _projectID,
-        'folder_id': '$_folderID',
+        if (_folderID != null) 'folder_id': '$_folderID',
         'page': '$_page',
         'size': '$_size',
       };
 
-  // project files - for translator only
-  void project(String projectID) async {
-    _projectID = projectID;
-    if (_projectID == null)
-      logger.e('Can\'t get files if project is null');
-    else
-      await _get();
-  }
-
-  // files in folder - for manager
-  void folder(String projectID, int folderID) async {
-    if (projectID == null) logger.e('Can\'t get files if project is null');
-    if (folderID == null) logger.e('Can\'t get files if folder is null');
-    if (projectID == null || folderID == null) return;
-    if (_folderID != folderID) {
-      _projectID = projectID;
+  void get([int folderID]) async {
+    if (_folderID == folderID)
+      logger.w('Try to get files for same folder $_folderID');
+    else {
       _folderID = folderID;
       await _get();
-    } else {
-      logger.w('Try to get files for same folder');
     }
   }
 
   Future<void> _get() async {
     logger.d('Get files ${_folderID != null ? 'for folder $_folderID in' : 'for'} project $_projectID');
+    _status = ApiStatus.LOADING; // strange but works
     ApiResponse _response = await _http.get('file', params: _params);
     _status = _response.status;
     if (_response.status == ApiStatus.OK) {

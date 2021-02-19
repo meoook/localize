@@ -21,7 +21,7 @@ class UiProjectTabBar extends StatelessWidget {
     final _scale = UiServiceSizing.scale(MediaQuery.of(context).size.width);
     const double _padding = UiServiceSizing.padding;
     var _theme = Theme.of(context);
-    Color _getColor(bool selected) => selected ? _theme.primaryColor : _theme.buttonColor;
+    Color _getColor(bool selected) => selected ? _theme.primaryColor : _theme.primaryColorLight;
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [

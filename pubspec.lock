@@ -70,7 +70,7 @@ packages:
       name: file
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "5.2.1"
+    version: "6.1.0"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -107,13 +107,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.1.4"
-  intl:
-    dependency: transitive
-    description:
-      name: intl
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.16.1"
   js:
     dependency: transitive
     description:
@@ -148,7 +141,7 @@ packages:
       name: nested
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.0.4"
+    version: "1.0.0"
   path:
     dependency: transitive
     description:
@@ -204,7 +197,7 @@ packages:
       name: process
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.0.13"
+    version: "4.1.0"
   provider:
     dependency: "direct main"
     description:
@@ -218,7 +211,7 @@ packages:
       name: rive
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.6.7"
+    version: "0.6.8"
   shared_preferences:
     dependency: "direct main"
     description:

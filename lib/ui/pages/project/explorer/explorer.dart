@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:localize/notifier/files.dart';
 import 'package:provider/provider.dart';
 
 import 'package:localize/services/http_client.dart';
@@ -9,7 +10,7 @@ import 'dialogs.dart';
 import 'folder_item.dart';
 import 'folder.dart';
 
-class UiProjectFolders extends StatelessWidget {
+class UiProjectExplorer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     NotifierFolders _folders = context.watch<NotifierFolders>();
@@ -25,16 +26,15 @@ class UiProjectFolders extends StatelessWidget {
       }
     }
 
-    // final double _scale = UiServiceSizing.scale(MediaQuery.of(context).size.width);
     const double _padding = UiServiceSizing.padding;
     return Row(
       children: [
         Container(
-          width: 150,
+          width: UiServiceSizing.folders,
           margin: const EdgeInsets.symmetric(horizontal: _padding),
           child: Column(
             children: [
-              UiFolderItem(text: 'new folder', onPressed: () => folderCreateDialog(context, _submit), isCreate: true),
+              UiFolderItem(text: 'new folder', isCreate: true, onPressed: () => folderCreateDialog(context, _submit)),
               if (_folders.status == ApiStatus.LOADING) Center(child: CircularProgressIndicator()),
               if ([ApiStatus.ERROR, ApiStatus.NO].contains(_folders.status)) Text('Error'),
               if (_folders.status == ApiStatus.OK)
@@ -43,9 +43,13 @@ class UiProjectFolders extends StatelessWidget {
                     physics: BouncingScrollPhysics(),
                     itemCount: _folders.list.length,
                     itemBuilder: (context, index) => UiFolderItem(
-                        text: _folders.list[index].name,
-                        onPressed: () => _folders.selected = _folders.list[index],
-                        active: _folders.selected == _folders.list[index]),
+                      text: _folders.list[index].name,
+                      onPressed: () {
+                        _folders.selected = _folders.list[index];
+                        context.read<NotifierFiles>().get(_folders.selected.id);
+                      },
+                      active: _folders.selected == _folders.list[index],
+                    ),
                   ),
                 ),
             ],

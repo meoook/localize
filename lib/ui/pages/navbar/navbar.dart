@@ -16,7 +16,7 @@ class UiNavBar extends StatelessWidget {
     return Container(
       width: UiServiceSizing.navbar,
       decoration: BoxDecoration(
-        color: Theme.of(context).dialogBackgroundColor,
+        color: Theme.of(context).bottomAppBarColor,
         boxShadow: [BoxShadow(blurRadius: _padding, offset: Offset(_padding * -0.5, 0.0))],
       ),
       child: Column(
@@ -27,7 +27,7 @@ class UiNavBar extends StatelessWidget {
           if (_canAdd) UiNavBarItem(choice: NavChoice.ADD),
           if (_canFile) UiNavBarItem(choice: NavChoice.FILE),
           const Spacer(),
-          const Divider(),
+          const Divider(height: 1.0, thickness: 1.0),
           UiNavBarItem(choice: NavChoice.OPTIONS),
           UiNavBarItem(choice: NavChoice.LOGOUT),
         ],

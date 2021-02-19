@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:localize/notifier/projects.dart';
+import 'package:localize/notifier/project.dart';
 import 'package:localize/ui/components/lang_icon.dart';
 import 'package:localize/ui/components/project_chars.dart';
 import 'package:localize/ui/utils.dart';

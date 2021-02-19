@@ -7,20 +7,19 @@ import 'package:localize/ui/utils.dart';
 class UiProjectAccess extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final ProviderNavigator _navigator = context.read<ProviderNavigator>();
     const double _padding = UiServiceSizing.padding;
-    ProviderNavigator _navigator = context.read<ProviderNavigator>();
-
     return Container(
       width: 600,
       constraints: BoxConstraints(maxHeight: 650),
       padding: EdgeInsets.symmetric(horizontal: _padding * 3, vertical: _padding * 2),
       decoration: BoxDecoration(
-        boxShadow: [BoxShadow(blurRadius: 8.0, offset: Offset(2.0, 1.0))],
-        borderRadius: BorderRadius.circular(16.0),
+        boxShadow: [BoxShadow(blurRadius: _padding, offset: Offset(2.0, 1.0))],
+        borderRadius: BorderRadius.circular(_padding * 2),
         color: Theme.of(context).dialogBackgroundColor,
       ),
       child: ChangeNotifierProvider<NotifierAccess>(
-        create: (_) => NotifierAccess(_edit),
+        create: (_) => NotifierAccess(_navigator.http, _navigator.project.id),
         child: Consumer<NotifierAccess>(builder: (context, project, child) {
           return Column(
             mainAxisAlignment: MainAxisAlignment.start,

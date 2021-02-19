@@ -13,13 +13,6 @@ class UiManageHelp extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (!firstDone)
-          RawMaterialButton(
-            onPressed: null,
-            padding: const EdgeInsets.symmetric(vertical: _padding, horizontal: _padding * 2),
-            child: Text('No folder selected', style: Theme.of(context).textTheme.subtitle1),
-          ),
-        if (!firstDone) const Divider(height: 1.0, thickness: 1.0),
         Padding(
           padding: const EdgeInsets.only(left: _padding, top: _padding),
           child: Text('To upload new files in the game do', style: Theme.of(context).textTheme.headline6),

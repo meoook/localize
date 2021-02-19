@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import 'package:localize/notifier/navigator.dart';
 import 'package:localize/notifier/projects.dart';
 import 'package:localize/notifier/system.dart';
-import 'package:localize/ui/pages/navbar/navbar.dart';
-import 'package:localize/ui/pages/file/file.dart';
-import 'package:localize/ui/pages/loading.dart';
-import 'package:localize/ui/pages/options/options.dart';
-import 'package:localize/ui/pages/project/project.dart';
-import 'package:localize/ui/pages/404.dart';
-import 'package:localize/ui/pages/add/add.dart';
-import 'package:localize/ui/pages/projects/projects.dart';
+
+import '404.dart';
+import 'add/add.dart';
+import 'loading.dart';
+import 'navbar/navbar.dart';
+import 'options/options.dart';
+import 'file/file.dart';
+import 'projects/projects.dart';
+import 'project/project.dart';
 
 class UiPageNavWrapper extends StatelessWidget {
   @override
@@ -20,10 +22,9 @@ class UiPageNavWrapper extends StatelessWidget {
     return MultiProvider(
       providers: [
         Provider<ProviderNavigator>(create: (_) => ProviderNavigator(_root.http)),
-        ChangeNotifierProvider<NotifierProjects>(create: (_) => NotifierProjects(_root.http)..init()),
+        ChangeNotifierProvider<NotifierProjects>(create: (_) => NotifierProjects(_root.http)),
       ],
       child: Scaffold(
-        // backgroundColor: Theme.of(context).backgroundColor,
         body: Consumer<ProviderNavigator>(builder: (context, navigator, child) {
           return UiPageNavigator(navigator: navigator);
         }),

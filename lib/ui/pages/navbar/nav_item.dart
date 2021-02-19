@@ -15,7 +15,7 @@ class UiNavBarItem extends StatelessWidget {
     const double _padding = UiServiceSizing.padding;
     return TextButton(
       onPressed: () {
-        _navigator.project = null;
+        if (_model.nav == NavChoice.PROJECTS) _navigator.project = null;
         _navigator.navigate(_model.nav);
       },
       style: _model.nav == _navigator.nav ? TextButton.styleFrom(primary: Theme.of(context).accentColor) : null,

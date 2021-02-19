@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import 'package:localize/notifier/project.dart';
 import 'package:localize/notifier/projects.dart';
 import 'package:localize/ui/components/project_chars.dart';
 
@@ -67,7 +69,7 @@ class _UiAddProjectNamingState extends State<UiAddProjectNaming> {
             textInputAction: TextInputAction.next,
             autofocus: true,
             controller: _nameController,
-            // keyboardType: TextInputType.text,
+            // style: Theme.of(context).textTheme.bodyText1,
             validator: (name) {
               Pattern pattern = r'^[A-Za-z0-9]+(?:[ _-][A-Za-z0-9]+)*$';
               RegExp regex = new RegExp(pattern);
@@ -92,7 +94,7 @@ class _UiAddProjectNamingState extends State<UiAddProjectNaming> {
               Expanded(flex: 1, child: const SizedBox()),
               UiProjectIconChars(
                 iChars: _charsController.text.length > 0 ? _charsController.text : 'xx',
-                scale: widget.name == null ? 2 : 3,
+                scale: widget.name == null ? 3 : 2,
               ),
               Expanded(flex: 2, child: const SizedBox()),
               Expanded(
@@ -102,7 +104,7 @@ class _UiAddProjectNamingState extends State<UiAddProjectNaming> {
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   textInputAction: TextInputAction.done,
                   controller: _charsController,
-                  keyboardType: TextInputType.text,
+                  // style: Theme.of(context).textTheme.bodyText1,
                   validator: (chars) {
                     Pattern pattern = r'^[A-Za-z0-9]{1,2}$';
                     RegExp regex = new RegExp(pattern);

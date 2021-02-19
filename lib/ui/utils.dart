@@ -12,8 +12,9 @@ class UiServiceSizing {
   // App constants
   static const double padding = 8.0;
   static const double navbar = 80.0;
-  static const double drawer = 200.0;
-  static const double file = 140.0; // File card height
+  // static const double drawer = 200.0;
+  static const double folders = 150.0; // Explorer folder width
+  // static const double file = 140.0; // File card height
   // Size to change scale
   static const double size_xl = 1200.0;
   static const double size_l = 1000.0;

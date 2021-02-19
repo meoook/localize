@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:localize/notifier/projects.dart';
+import 'package:localize/notifier/project.dart';
 import 'package:localize/model/project.dart';
 
 import 'buttons.dart';

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'constants.dart';
 
 // Brand color 0xFF7545D2 (116, 69, 226)
-Map<int, Color> _brandMap = {
+const Map<int, Color> _brandMap = {
   50: Color(0xAA7545D2),
   100: Color(0xBB7545D2),
   200: Color(0xCC7545D2),
@@ -15,34 +15,41 @@ Map<int, Color> _brandMap = {
   800: Color(0xFFB675F2),
   900: Color(0xFFB695F2),
 };
-Map<int, Color> _grayMap = {
-  50: Color(0xFF404040),
-  100: Color(0xFF4F4F4F),
-  200: Color(0xFF5E5E5E),
-  300: Color(0xFF6D6D6D),
-  400: Color(0xFF7C7C7C),
-  500: Color(0xFF8B8B8B),
-  600: Color(0xFF9A9A9A),
-  700: Color(0xFFAAAAAA),
-  800: Color(0xFFBBBBBB),
-  900: Color(0xFFCCCCCC),
+const int _gray = 0xFF9A9A9A;
+const Map<int, Color> _grayMap = {
+  50: Color(0xFFCCCCCC),
+  100: Color(0xFFBBBBBB),
+  200: Color(0xFFAAAAAA),
+  300: Color(0xFF9A9A9A),
+  400: Color(0xFF8B8B8B),
+  500: Color(0xFF7C7C7C),
+  600: Color(0xFF6D6D6D),
+  700: Color(0xFF5E5E5E),
+  800: Color(0xFF4F4F4F),
+  900: Color(0xFF404040),
 };
 
 ThemeData applicationThemeDark = ThemeData(
   brightness: Brightness.dark,
-  // colorScheme: ColorScheme(),
-  primaryColor: Color(0xFFFFFFFF), // Background primary
-  accentColor: Color(0xFF7545D2), // Active elements
-  // backgroundColor: Color(0xFF2A2A32),
-  scaffoldBackgroundColor: Color(0xFF2A2A32),
-  dialogBackgroundColor: Color(0xFF202029),
-  secondaryHeaderColor: Color(0xFF23232B),
+  primaryColor: const Color(0xFFFFFFFF), // Background primary
+  primarySwatch: const MaterialColor(_gray, _grayMap),
+  accentColor: const Color(0xFF7545D2), // Active elements
+  scaffoldBackgroundColor: const Color(0xFF2A2A32),
+  backgroundColor: Color(0xFF28282C),
+  dialogBackgroundColor: const Color(0xFF24242B),
+  bottomAppBarColor: const Color(0xFF202029),
+  // secondaryHeaderColor: Color(0xFF23232B),
   // accentColor: MaterialColor(0xFF7545D2, _brandMap), // Active elements
-  // buttonColor: Color(0xFFAAAAAA),
+  buttonColor: const Color(0xFF55AB55),
   // primarySwatch: Colors.deepPurple, // text buttons and so on (only material colors)
-  primarySwatch: MaterialColor(0xFFCCCCCC, _grayMap),
-  fontFamily: fontNameDefault,
-  // textTheme: _textTheme,
+  fontFamily: 'Montserrat',
+  textTheme: TextTheme(
+    bodyText1: TextStyle(fontSize: 14.0, color: Color(0xFFFFFFFF)),
+    bodyText2: TextStyle(fontSize: 14.0, color: const Color(_gray)),
+    subtitle1: TextStyle(fontSize: 16.0, color: const Color(0xFFFFFFFF)),
+    subtitle2: TextStyle(fontSize: 16.0, color: const Color(_gray)),
+  ),
+  // sliderTheme:
 );
 
 ThemeData applicationThemeLight = ThemeData(
