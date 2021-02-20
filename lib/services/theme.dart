@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 
 import 'constants.dart';
 
+// FiXMe: make class, use copyWith (try switch theme -> buttons)
+
+const double _padding = 8.0;
 // Brand color 0xFF7545D2 (116, 69, 226)
 const Map<int, Color> _brandMap = {
   50: Color(0xAA7545D2),
@@ -40,14 +43,47 @@ ThemeData applicationThemeDark = ThemeData(
   bottomAppBarColor: const Color(0xFF202029),
   // secondaryHeaderColor: Color(0xFF23232B),
   // accentColor: MaterialColor(0xFF7545D2, _brandMap), // Active elements
-  buttonColor: const Color(0xFF55AB55),
+  buttonColor: const Color(0xFF448B44),
   // primarySwatch: Colors.deepPurple, // text buttons and so on (only material colors)
   fontFamily: 'Montserrat',
   textTheme: TextTheme(
-    bodyText1: TextStyle(fontSize: 14.0, color: Color(0xFFFFFFFF)),
+    bodyText1: TextStyle(fontSize: 14.0, color: const Color(0xFFFFFFFF)),
     bodyText2: TextStyle(fontSize: 14.0, color: const Color(_gray)),
     subtitle1: TextStyle(fontSize: 16.0, color: const Color(0xFFFFFFFF)),
     subtitle2: TextStyle(fontSize: 16.0, color: const Color(_gray)),
+  ),
+  // buttonTheme: ButtonThemeData(
+  //   height: 100,
+  //   minWidth: 150,
+  //   shape: RoundedRectangleBorder(),
+  //   textTheme: ButtonTextTheme.accent,
+  // ),
+  inputDecorationTheme: InputDecorationTheme(
+    isDense: true,
+    border: OutlineInputBorder(borderRadius: BorderRadius.circular(_padding)),
+    // contentPadding: EdgeInsets.all(20.0),
+    // labelStyle: textStyle,
+    // errorStyle: TextStyle(color: Colors.redAccent, fontSize: 16.0),
+  ),
+
+  elevatedButtonTheme: ElevatedButtonThemeData(
+    style: ElevatedButton.styleFrom(
+      // backgroundColor: const Color(0xFF448B44),
+      primary: const Color(0xFF448B44),
+      textStyle: const TextStyle(color: Colors.white, fontSize: _padding * 3, wordSpacing: 1.0, letterSpacing: 1.0),
+      minimumSize: const Size(_padding * 12, _padding * 6),
+      padding: const EdgeInsets.symmetric(horizontal: _padding * 3),
+      // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(_padding / 2)),
+    ),
+  ),
+
+  outlinedButtonTheme: OutlinedButtonThemeData(
+    style: OutlinedButton.styleFrom(
+      primary: const Color(_gray),
+      minimumSize: const Size(_padding * 12, _padding * 6),
+      padding: const EdgeInsets.symmetric(horizontal: _padding * 3),
+      textStyle: const TextStyle(fontSize: _padding * 3, wordSpacing: 1.0, letterSpacing: 1.0),
+    ),
   ),
   // sliderTheme:
 );

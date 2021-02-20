@@ -34,7 +34,7 @@ class NotifierFolders with ChangeNotifier {
     if (_projectID != null)
       this._get();
     else
-      logger.w('Can\'t request folders if no project');
+      logger.w('Can\'t request folders if project not set');
   }
 
   Future<void> _get() async {

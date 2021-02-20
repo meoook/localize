@@ -27,6 +27,6 @@ class ProviderNavigator {
   void navigate([NavChoice choice]) {
     if (choice != null) nav = choice;
     if (_navigate != null) _navigate(nav);
-    if (_navigate != null) logger.d('Navigate to ${choice.text}');
+    if (_navigate != null) logger.d('Navigate to ${nav.text}');
   }
 }

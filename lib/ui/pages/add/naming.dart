@@ -69,34 +69,28 @@ class _UiAddProjectNamingState extends State<UiAddProjectNaming> {
             textInputAction: TextInputAction.next,
             autofocus: true,
             controller: _nameController,
-            // style: Theme.of(context).textTheme.bodyText1,
             validator: (name) {
               Pattern pattern = r'^[A-Za-z0-9]+(?:[ _-][A-Za-z0-9]+)*$';
               RegExp regex = new RegExp(pattern);
-              if (!regex.hasMatch(name))
-                return 'Invalid project name';
-              else if (_names.contains(name))
-                return 'Game with this name already exist';
-              else
-                return null;
+              if (!regex.hasMatch(name)) return 'Invalid project name';
+              if (_names.contains(name)) return 'Game with this name already exist';
+              return null;
             },
             decoration: InputDecoration(
               prefixIcon: Icon(Icons.title),
               labelText: "Project name",
-              // errorText: context.select((AuthUser user) => user.error),
               helperText: "Enter your project name here",
-              border: OutlineInputBorder(borderRadius: BorderRadius.circular(12.0)),
             ),
           ),
           const SizedBox(height: 12.0),
           Row(
             children: [
-              Expanded(flex: 1, child: const SizedBox()),
+              const Expanded(flex: 1, child: const SizedBox()),
               UiProjectIconChars(
                 iChars: _charsController.text.length > 0 ? _charsController.text : 'xx',
                 scale: widget.name == null ? 3 : 2,
               ),
-              Expanded(flex: 2, child: const SizedBox()),
+              const Expanded(flex: 2, child: const SizedBox()),
               Expanded(
                 flex: 4,
                 child: TextFormField(
@@ -104,22 +98,15 @@ class _UiAddProjectNamingState extends State<UiAddProjectNaming> {
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                   textInputAction: TextInputAction.done,
                   controller: _charsController,
-                  // style: Theme.of(context).textTheme.bodyText1,
                   validator: (chars) {
                     Pattern pattern = r'^[A-Za-z0-9]{1,2}$';
                     RegExp regex = new RegExp(pattern);
-                    if (!regex.hasMatch(chars))
-                      return 'Invalid icon chars';
-                    else
-                      return null;
+                    return !regex.hasMatch(chars) ? 'Invalid icon chars' : null;
                   },
                   decoration: InputDecoration(
-                    contentPadding: EdgeInsets.all(20.0),
                     // prefixIcon: Icon(Icons.check_box_outline_blank),
                     prefixText: "Letters for icon: ",
-                    // labelText: "Chars for icon",
                     helperText: "Enter letters for icon",
-                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(12.0)),
                   ),
                 ),
               ),

@@ -5,10 +5,11 @@ import 'package:localize/model/project.dart';
 import 'package:localize/notifier/project.dart';
 import 'package:localize/notifier/projects.dart';
 import 'package:localize/notifier/navigator.dart';
-import 'package:localize/ui/pages/add/buttons.dart';
 import 'package:localize/ui/pages/add/languages.dart';
 import 'package:localize/ui/pages/add/naming.dart';
 import 'package:localize/ui/utils.dart';
+
+import 'explorer/dialogs.dart';
 
 class UiProjectChange extends StatelessWidget {
   @override
@@ -31,6 +32,17 @@ class UiProjectChange extends StatelessWidget {
         child: Provider<ProviderProject>(
           create: (_) => ProviderProject(_edit),
           child: Consumer<ProviderProject>(builder: (context, project, child) {
+            void _rmProject() async {
+              String _msg = 'Error deleting game ${_navigator.project.name}';
+              bool _success = await context.read<NotifierProjects>().delete(_navigator.project.id);
+              if (_success) {
+                _msg = 'Game ${_navigator.project.name} deleted';
+                _navigator.project = null;
+                _navigator.navigate();
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(_msg)));
+              }
+            }
+
             return Column(
               mainAxisAlignment: MainAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
@@ -40,8 +52,13 @@ class UiProjectChange extends StatelessWidget {
                 UiAddProjectLanguages(project: project),
                 ButtonBar(
                   children: [
-                    UiAddProjectButton(
-                        text: 'Save',
+                    OutlinedButton(
+                      onPressed: () => warningDeleteDialog(context, _rmProject, 'game', _navigator.project.name),
+                      child: Text('Remove game', style: TextStyle(color: Theme.of(context).errorColor)),
+                    ),
+                    const SizedBox(width: _padding * 2),
+                    ElevatedButton(
+                        child: Text('Save'),
                         onPressed: () async {
                           String _msg = 'Error saving game ${_navigator.project.name}';
                           if (project.isOk) {

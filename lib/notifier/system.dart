@@ -23,6 +23,8 @@ class NotifierSystem with ChangeNotifier {
   ModelUser get user => _user;
   List<ModelLanguage> get languages => _languages;
   ModelOptions get options => _options.options;
+  List<String> _names = [];
+  List<String> get names => _names;
 
   NotifierSystem() {
     _startApp();
@@ -39,6 +41,7 @@ class NotifierSystem with ChangeNotifier {
     await _options.optionInit();
     if (_options.options.token != null && _options.options.token.isNotEmpty) await _auth(_options.options.token);
     if (_user != null) await _languagesGet();
+    if (_user != null) _getNames(); // No need to wait users list (used in deep widgets)
     if (_languages != null) notifyListeners();
   }
 
@@ -56,6 +59,17 @@ class NotifierSystem with ChangeNotifier {
   static List<ModelLanguage> _isolate(String data) {
     var _json = jsonDecode(data);
     return List.from(_json).map((e) => ModelLanguage.fromJson(e)).toList();
+  }
+
+  Future<void> _getNames() async {
+    logger.d('Get list of users...');
+    ApiResponse _response = await http.get('auth/users');
+    if (_response.status == ApiStatus.OK) {
+      _names = List.from(_response.json).map((e) => e['first_name'].toString()).toList();
+      logger.i('Get ${_names.length} user names');
+    } else {
+      logger.w('Get user names ${_response.message}');
+    }
   }
 
   Future<void> _auth(String token) async {

@@ -66,19 +66,14 @@ class _UiLoginFormState extends State<UiLoginForm> {
                 if (name.isEmpty) return 'Username can\'t be empty';
                 Pattern pattern = r'^[A-Za-z0-9\-\_\ ]+$';
                 RegExp regex = new RegExp(pattern);
-                if (!regex.hasMatch(name))
-                  return 'Invalid username';
-                else
-                  return null;
+                return !regex.hasMatch(name) ? 'Invalid username' : null;
               },
               autofocus: true,
               controller: _usernameController,
               decoration: InputDecoration(
                 prefixIcon: Icon(Icons.person_outline_rounded),
                 labelText: "Username",
-                // errorText: context.select((AuthUser user) => user.error),
                 helperText: "Enter your username or email here",
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(12.0)),
               ),
             ),
             const SizedBox(height: 12),
@@ -86,28 +81,20 @@ class _UiLoginFormState extends State<UiLoginForm> {
               onChanged: (String text) => displayError = false,
               textInputAction: TextInputAction.done,
               validator: (password) {
-                Pattern pattern = r'^.*$';
+                Pattern pattern = r'^.*$'; // no space
                 RegExp regex = new RegExp(pattern);
-                if (!regex.hasMatch(password))
-                  return 'Invalid password';
-                else
-                  return null;
+                return !regex.hasMatch(password) ? 'Invalid password' : null;
               },
               controller: _passwordController,
               obscureText: true,
               keyboardType: TextInputType.text,
               decoration: InputDecoration(
-                contentPadding: EdgeInsets.all(20.0),
                 prefixIcon: Icon(Icons.lock_outline_rounded),
                 labelText: "Password",
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(12.0)),
               ),
             ),
             const SizedBox(height: 12),
             ButtonBar(
-              buttonMinWidth: 100.0,
-              buttonHeight: 40.0,
-              // buttonPadding: EdgeInsets.all(12.0),
               children: [
                 TextButton(
                   child: Text('Forgot password ?'),

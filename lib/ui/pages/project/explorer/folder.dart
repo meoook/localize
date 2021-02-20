@@ -33,8 +33,8 @@ class _UiFolderManagerState extends State<UiFolderManager> {
         if (_current == null) UiManageHelp(),
         if (_current != null) ...[
           if (_selected == FolderOption.LIST) UiFileList(key: UniqueKey(), folderID: _current.id),
-          if (_selected == FolderOption.ADD) Expanded(child: Container(color: Colors.red, child: Text('two'))),
-          if (_selected == FolderOption.MODIFY) Expanded(child: Container(color: Colors.green, child: Text('three'))),
+          if (_selected == FolderOption.ADD) Expanded(child: Placeholder(color: Colors.red)),
+          if (_selected == FolderOption.MODIFY) Expanded(child: Placeholder(color: Colors.green)),
         ]
       ],
     );

@@ -45,33 +45,10 @@ class UiAddProjectButtons extends StatelessWidget {
       // buttonHeight: 50.0,
       // buttonPadding: EdgeInsets.symmetric(horizontal: 12.0),
       children: [
-        if (step > 1) UiAddProjectButton(text: 'Previous', onPressed: _prev),
-        if (step < 3) UiAddProjectButton(text: 'Next', onPressed: _next),
-        if (step == 3) UiAddProjectButton(text: 'Finish', onPressed: () => _finish(context)),
+        if (step > 1) OutlinedButton(child: Text('Previous'), onPressed: _prev),
+        if (step < 3) ElevatedButton(child: Text('Next'), onPressed: _next),
+        if (step == 3) ElevatedButton(child: Text('Finish'), onPressed: () => _finish(context)),
       ],
-    );
-  }
-}
-
-class UiAddProjectButton extends StatelessWidget {
-  final Function onPressed;
-  final String text;
-
-  const UiAddProjectButton({Key key, @required this.text, @required this.onPressed}) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    const _padding = UiServiceSizing.padding;
-
-    return RawMaterialButton(
-      fillColor: Theme.of(context).buttonColor,
-      hoverColor: Colors.white10,
-      splashColor: Theme.of(context).splashColor,
-      elevation: _padding / 2,
-      padding: const EdgeInsets.symmetric(horizontal: _padding * 2, vertical: _padding / 2),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(_padding / 2)),
-      textStyle: Theme.of(context).textTheme.subtitle1.copyWith(color: Theme.of(context).accentColor),
-      onPressed: onPressed,
-      child: Text(text, style: Theme.of(context).textTheme.headline5),
     );
   }
 }

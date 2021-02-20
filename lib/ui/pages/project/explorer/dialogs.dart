@@ -13,8 +13,8 @@ Future<void> folderCreateDialog(BuildContext context, Function submit) async {
         // buttonPadding: EdgeInsets.all(20.0),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
         actions: [
-          TextButton(onPressed: () => Navigator.of(context).pop(), child: Text("Cancel")),
-          TextButton(onPressed: () => submit(_value), child: Text("Create"))
+          OutlinedButton(onPressed: () => Navigator.of(context).pop(), child: Text("Cancel")),
+          ElevatedButton(onPressed: () => submit(_value), child: Text("Create"))
         ],
         content: TextField(
           autofocus: true,
@@ -44,8 +44,11 @@ Future<void> warningDeleteDialog(BuildContext context, Function submit, String t
         // backgroundColor: Colors.green,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
         actions: [
-          TextButton(onPressed: () => Navigator.of(context).pop(), child: Text("Cancel")),
-          TextButton(onPressed: _submit, child: Text("Delete", style: TextStyle(color: Theme.of(context).errorColor)))
+          OutlinedButton(
+            onPressed: _submit,
+            child: Text("Delete", style: TextStyle(color: Theme.of(context).errorColor)),
+          ),
+          ElevatedButton(onPressed: () => Navigator.of(context).pop(), child: Text("Cancel")),
         ],
         content: RichText(
           text: TextSpan(

@@ -11,8 +11,16 @@ class _Access {
   final String userName;
   final List<_Perm> permissions;
 
+  static AccessLevel _getLvl(int permissionNumber) {
+    if (permissionNumber == 9) return AccessLevel.ADMIN;
+    if (permissionNumber == 8) return AccessLevel.MANAGE;
+    if (permissionNumber == 5) return AccessLevel.INVITE;
+    if (permissionNumber == 0) return AccessLevel.TRANSLATE;
+    return null;
+  }
+
   _Access(this.userName, List<dynamic> permissions)
-      : permissions = permissions.map((e) => _Perm(e['id'], e['permission'])).toList();
+      : permissions = permissions.map((e) => _Perm(e['id'], _getLvl(e['permission']))).toList();
 }
 
 class _Perm {
@@ -27,6 +35,7 @@ class _Perm {
   bool get isInviter => lvl == AccessLevel.INVITE;
 }
 
+// Notifier
 class NotifierAccess with ChangeNotifier {
   final ServiceHttpClient _http;
   final String _projectID;
@@ -36,13 +45,9 @@ class NotifierAccess with ChangeNotifier {
 
   List<_Access> _usersAccess = [];
   List<_Access> get list => _usersAccess;
-  List<String> _names = [];
-  List<String> get names => _names;
 
   NotifierAccess(this._http, this._projectID) {
-    logger.d('Initialize permissions...');
     _get();
-    _getNames();
   }
 
   Future<void> _get() async {
@@ -63,18 +68,6 @@ class NotifierAccess with ChangeNotifier {
     var _list = List.from(_json).map((e) => _Access(e['first_name'], e['prj_perms'])).toList();
     _list.sort((a, b) => a.userName.compareTo(b.userName));
     return _list;
-  }
-
-  Future<void> _getNames() async {
-    logger.d('Get list of users');
-    ApiResponse _response = await _http.get('auth/users');
-    if (_response.status == ApiStatus.OK) {
-      _names = List.from(_response.json).map((e) => e['first_name'].toString()).toList();
-      logger.i('Get ${_names.length} user names');
-      // notifyListeners();
-    } else {
-      logger.w('Get user names ${_response.message}');
-    }
   }
 
   // void change(ModelFile file) async {

@@ -95,9 +95,11 @@ class UiPageOptions extends StatelessWidget {
               children: [
                 TextButton(child: Text('Text'), onPressed: () {}),
                 OutlinedButton(child: Text('Outline'), onPressed: () {}),
-                ElevatedButton(child: Text('Elevated'), onPressed: () {}),
+                ElevatedButton(child: Text('Xxx'), onPressed: () {}),
+                ElevatedButton(child: Text('Test size button'), onPressed: () {}),
               ],
             ),
+            ElevatedButton(child: Text('Elevated'), onPressed: () {}),
           ],
         ),
       ),
