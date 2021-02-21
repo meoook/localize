@@ -1,0 +1,17 @@
+{
+  "nav_games": "Games",
+  "nav_add": "Add",
+  "nav_last": "Last file",
+  "nav_options": "Options",
+  "nav_logout": "Sing out",
+  "login_field_user": "Username",
+  "login_field_pwd": "Password",
+  "login_help_user": "Enter your username or email here",
+  "login_err_empty": "Username can't be empty",
+  "login_err_invalid_user": "Invalid username",
+  "login_err_invalid_pwd": "Invalid password",
+  "login_err_incorrect": "User name or password incorrect",
+  "login_submit": "Submit",
+  "login_forgot": "Forgot password?",
+  "login_try_login": "Try to login"
+}

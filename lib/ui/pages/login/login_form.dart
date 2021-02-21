@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:localize/generated/l10n.dart';
 import 'package:localize/notifier/system.dart';
 import 'package:localize/services/http_client.dart';
 import 'package:localize/ui/image/rive_image.dart';
@@ -33,7 +34,7 @@ class _UiLoginFormState extends State<UiLoginForm> {
       context.read<NotifierSystem>().login(username: _usernameController.text, password: _passwordController.text);
       displayError = true;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Try to login...')),
+        SnackBar(content: Text(S.of(context).login_try_login)),
       );
     }
   }
@@ -62,18 +63,18 @@ class _UiLoginFormState extends State<UiLoginForm> {
               autovalidateMode: AutovalidateMode.onUserInteraction,
               textInputAction: TextInputAction.next,
               validator: (name) {
-                if (displayError && _status == ApiStatus.ERROR) return 'User name or password incorrect';
-                if (name.isEmpty) return 'Username can\'t be empty';
+                if (displayError && _status == ApiStatus.ERROR) return S.of(context).login_err_incorrect;
+                if (name.isEmpty) return S.of(context).login_err_empty;
                 Pattern pattern = r'^[A-Za-z0-9\-\_\ ]+$';
                 RegExp regex = new RegExp(pattern);
-                return !regex.hasMatch(name) ? 'Invalid username' : null;
+                return !regex.hasMatch(name) ? S.of(context).login_err_invalid_user : null;
               },
               autofocus: true,
               controller: _usernameController,
               decoration: InputDecoration(
                 prefixIcon: Icon(Icons.person_outline_rounded),
-                labelText: "Username",
-                helperText: "Enter your username or email here",
+                labelText: S.of(context).login_field_user,
+                helperText: S.of(context).login_help_user,
               ),
             ),
             const SizedBox(height: 12),
@@ -83,21 +84,21 @@ class _UiLoginFormState extends State<UiLoginForm> {
               validator: (password) {
                 Pattern pattern = r'^.*$'; // no space
                 RegExp regex = new RegExp(pattern);
-                return !regex.hasMatch(password) ? 'Invalid password' : null;
+                return !regex.hasMatch(password) ? S.of(context).login_err_invalid_pwd : null;
               },
               controller: _passwordController,
               obscureText: true,
               keyboardType: TextInputType.text,
               decoration: InputDecoration(
                 prefixIcon: Icon(Icons.lock_outline_rounded),
-                labelText: "Password",
+                labelText: S.of(context).login_field_pwd,
               ),
             ),
             const SizedBox(height: 12),
             ButtonBar(
               children: [
                 TextButton(
-                  child: Text('Forgot password ?'),
+                  child: Text(S.of(context).login_forgot),
                   onPressed: () => {},
                 ),
                 // OutlineButton(
@@ -107,7 +108,7 @@ class _UiLoginFormState extends State<UiLoginForm> {
                 ElevatedButton(
                   autofocus: true,
                   onPressed: _onLogin,
-                  child: Text('Submit'),
+                  child: Text(S.of(context).login_submit),
                 ),
               ],
             ),

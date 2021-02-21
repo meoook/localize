@@ -11,6 +11,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  intl: ^0.17.0
 
   http: ^0.12.2
   provider: ^4.3.3
@@ -23,7 +26,7 @@ dependencies:
   logger: ^0.9.4
 
   # Images
-  rive: ^0.6.4
+  rive: ^0.6.8
 
   # Use with the Cupertino Icons class for iOS style icons.
   cupertino_icons: ^1.0.2
@@ -41,7 +44,7 @@ dev_dependencies:
     sdk: flutter
 
 flutter:
-
+  generate: true
   uses-material-design: true
 
   assets:
@@ -62,3 +65,5 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+flutter_intl:
+  enabled: true
