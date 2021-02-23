@@ -1,6 +1,6 @@
 extension StringExtension on String {
   String capitalize() => "${this[0].toUpperCase()}${this.substring(1).toLowerCase()}";
-  String cutTo(int length) => (this.length > length) ? this.substring(0, length - 2) + '...' : this;
+  String cutTo(int length) => (this.length > length && length > 3) ? this.substring(0, length - 2) + '...' : this;
 }
 
 extension DateTimeExtension on DateTime {
@@ -20,6 +20,11 @@ class UiServiceSizing {
   static const double size_l = 1000.0;
   static const double size_m = 900.0;
   static const double size_s = 600.0;
+  // Const padding
+  // static const paddingS EdgeInsets.symmetric(horizontal: padding, vertical: padding/2);
+  // static const paddingM EdgeInsets.symmetric(horizontal: padding * 2, vertical: padding);
+  // static const paddingL EdgeInsets.symmetric(horizontal: padding * 4, vertical: padding*2);
+  // static const paddingH EdgeInsets.symmetric(horizontal: padding * 2);
 
   static double scale(double width) {
     if (width > size_xl) return 1.6;

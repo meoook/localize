@@ -1,33 +1,10 @@
 import 'dart:convert';
-
 import 'package:flutter/foundation.dart';
 
+import 'package:localize/model/access.dart';
 import 'package:localize/services/http_client.dart';
 import 'package:localize/services/logger.dart';
 
-// FIXME: this class not finished
-class UserAccess {
-  final String name;
-  int admin;
-  int manage;
-  int invite;
-  int translate;
-
-  UserAccess(this.name, List<dynamic> permissions) {
-    permissions.forEach((e) {
-      if (e['permission'] == nTranslate) translate = e['id'];
-      if (e['permission'] == nInvite) invite = e['id'];
-      if (e['permission'] == nManage) manage = e['id'];
-      if (e['permission'] == nAdmin) admin = e['id'];
-    });
-  }
-  static const int nTranslate = 0;
-  static const int nInvite = 5;
-  static const int nManage = 8;
-  static const int nAdmin = 9;
-}
-
-// Notifier
 class NotifierAccess with ChangeNotifier {
   final ServiceHttpClient _http;
   final String _projectID;
@@ -64,33 +41,39 @@ class NotifierAccess with ChangeNotifier {
     return _list;
   }
 
-  void create(String name, int lvl) {
-    logger.i('Try to set permission level $lvl to $name for project $_projectID');
+  void create(UserAccess user, int lvl) async {
+    logger.d('Try to set permission level $lvl to ${user.name} for project $_projectID');
+    var _data = <String, String>{'save_id': _projectID, 'first_name': user.name, 'permission': '$lvl'};
+    ApiResponse _response = await _http.post('prj/perm/', data: _data);
+    if (_response.status == ApiStatus.OK) {
+      int _permID = _response.json['id'];
+      user.add(lvl, _permID);
+      int idx = _usersAccess.indexWhere((_e) => _e.name == user.name);
+      if (idx == -1)
+        _usersAccess.add(user);
+      else
+        _usersAccess[idx] = user;
+      logger.i('Permission with id $_permID lvl $lvl created for ${user.name} in project $_projectID');
+      notifyListeners();
+    } else {
+      logger.w('Permission add fail - ${_response.message}');
+    }
   }
 
-  void delete(int permissionID) {
-    logger.i('Try to remove permission with id in project $_projectID');
+  void delete(UserAccess user, int permID) async {
+    logger.d('Try to remove permission with id in project $_projectID');
+    ApiResponse _response = await _http.delete('prj/perm/$permID/');
+    if (_response.status == ApiStatus.OK) {
+      user.remove(permID);
+      if (user.noAccess) {
+        logger.i('User ${user.name} have no more access to project $_projectID');
+        _usersAccess.remove(user);
+      } else {
+        logger.i('Permission with id $permID deleted for user ${user.name} in project $_projectID');
+      }
+      notifyListeners();
+    } else {
+      logger.w('Permission $permID delete fail - ${_response.message}');
+    }
   }
-
-// void change(ModelFile file) async {
-  //   // TODO - finish
-  //   final ModelFile _before = _files.firstWhere((element) => element.id == file.id);
-  //   if (_before == null) return;
-  //   logger.i('Changing $_before name to ${file.name}');
-  //   ApiResponse _response = await _http.put('prj/file/${file.id}/', data: {'name': file.name});
-  // }
-  //
-  // void delete(ModelFile file) async {
-  //   logger.d('Delete $file');
-  //   ApiResponse _response = await _http.delete('prj/folder/${file.id}/');
-  //   if (_response.status == ApiStatus.OK) {
-  //     logger.i('File ${file.name} deleted');
-  //     _files.remove(file);
-  //     // _folders.sort((a, b) => a.position.compareTo(b.position));
-  //     // _selected = _folders.isNotEmpty ? _folders.first : null;
-  //     notifyListeners();
-  //   } else {
-  //     logger.w('Delete $file fail - ${_response.message}');
-  //   }
-  // }
 }

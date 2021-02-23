@@ -11,7 +11,7 @@ import '../404.dart';
 import '../projects/card.dart';
 import 'explorer/explorer.dart';
 import 'explorer/file_list.dart';
-import 'access.dart';
+import 'access/access.dart';
 import 'options.dart';
 import 'tabbar.dart';
 

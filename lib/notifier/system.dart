@@ -100,6 +100,7 @@ class NotifierSystem with ChangeNotifier {
       http.token = _user.token;
       await _options.optionChange(OptionKey.TOKEN, _user.token);
       await _languagesGet();
+      _getNames();
     }
     logger.i('After login - $user');
     notifyListeners();
